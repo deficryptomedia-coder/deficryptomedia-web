@@ -181,6 +181,30 @@
     font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--faint); letter-spacing:.02em;}
   .disc{color:var(--faint); max-width:62ch; font-size:.74rem; margin-top:10px; line-height:1.5;}
 
+  /* ---------- READER (halaman baca artikel) ---------- */
+  .reader{position:fixed; inset:0; z-index:60; background:var(--ink); overflow-y:auto;
+    opacity:0; visibility:hidden; transition:opacity .25s ease;}
+  .reader.open{opacity:1; visibility:visible;}
+  .reader-inner{max-width:760px; margin:0 auto; padding:30px 22px 80px;}
+  .reader-close{display:inline-flex; align-items:center; gap:7px; background:none; border:1px solid var(--line-2);
+    color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:.76rem; letter-spacing:.04em;
+    padding:9px 15px; border-radius:999px; cursor:pointer; margin:8px 0 28px; transition:.2s;}
+  .reader-close:hover{border-color:var(--gold); color:var(--gold);}
+  .reader .eyebrow{display:inline-block; margin-bottom:14px;}
+  .reader h1{font-family:"Fraunces",serif; font-weight:600; line-height:1.08; letter-spacing:-.015em;
+    font-size:clamp(1.9rem,4vw,2.9rem); margin:0 0 16px;}
+  .reader .byline{font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--faint);
+    letter-spacing:.03em; padding-bottom:22px; margin-bottom:26px; border-bottom:1px solid var(--line);}
+  .reader .byline b{color:var(--gold); font-weight:500;}
+  .article-body p{font-size:1.07rem; line-height:1.75; color:#D8D6CD; margin:0 0 20px;}
+  .article-body p:first-child{font-size:1.16rem; color:var(--paper);}
+  .r-source{display:inline-flex; align-items:center; gap:8px; margin-top:14px;
+    font-family:"IBM Plex Mono",monospace; font-size:.8rem; letter-spacing:.03em;
+    border:1px solid var(--gold-dim); color:var(--gold); padding:11px 18px; border-radius:999px; transition:.2s;}
+  .r-source:hover{background:var(--gold); color:#1a1407; border-color:var(--gold);}
+  .r-disc{margin-top:30px; padding-top:18px; border-top:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--faint); line-height:1.5;}
+
   /* ---------- RESPONSIVE ---------- */
   @media(max-width:920px){
     .hero{grid-template-columns:1fr; gap:30px;}
@@ -302,6 +326,19 @@
   </section>
 
 </main>
+
+<!-- ===== READER: halaman baca artikel ===== -->
+<div class="reader" id="reader" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Artikel">
+  <div class="reader-inner">
+    <button class="reader-close" id="readerClose">← Kembali ke daftar</button>
+    <span class="eyebrow" id="rCat"></span>
+    <h1 id="rTitle"></h1>
+    <p class="byline" id="rMeta"></p>
+    <div class="article-body" id="rBody"></div>
+    <a class="r-source" id="rSource" target="_blank" rel="noopener noreferrer">Baca sumber asli ↗</a>
+    <p class="r-disc">Artikel ini ringkasan editorial berbahasa Indonesia, disusun ulang dari sumber dan bukan nasihat keuangan. Untuk detail lengkap, buka tautan sumber asli di atas.</p>
+  </div>
+</div>
 
 <!-- ===== FOOTER ===== -->
 <footer class="site">
@@ -430,14 +467,14 @@ renderTicker();
 function renderHero(){
   const lead = ARTICLES.find(a=>a.featured) || ARTICLES[0];
   $("#heroLead").innerHTML = `
-    <span class="eyebrow">${lead.cat}</span>
-    <h1><a href="${lead.url}">${lead.title}</a></h1>
+    <span class="eyebrow">${labelOf(lead.cat)}</span>
+    <h1><a href="#" data-open="${lead.id}">${lead.title}</a></h1>
     <p class="dek">${lead.dek}</p>
     <p class="byline">Sumber <b>${lead.src}</b> &nbsp;·&nbsp; ${lead.time}</p>`;
   const secs = ARTICLES.filter(a=>!a.featured).slice(0,3).map(a=>`
     <div class="sec">
-      <div class="eyebrow"><b>${a.cat}</b></div>
-      <h3><a href="${a.url}">${a.title}</a></h3>
+      <div class="eyebrow"><b>${labelOf(a.cat)}</b></div>
+      <h3><a href="#" data-open="${a.id}">${a.title}</a></h3>
       <div class="meta">${a.src} · ${a.time}</div>
     </div>`).join("");
   $("#heroSecs").innerHTML = secs;
@@ -469,7 +506,7 @@ function renderGrid(){
   if(!slice.length){ grid.innerHTML = `<div class="empty">Belum ada berita di kanal ini.</div>`; }
   else{
     grid.innerHTML = slice.map(a=>`
-      <article class="card" tabindex="0" onclick="location.href='${a.url}'">
+      <article class="card" data-open="${a.id}" tabindex="0" role="button" aria-label="Buka artikel">
         <div class="top"><span class="tag ${a.live?'live':''}">${labelOf(a.cat)}</span></div>
         <h3>${a.title}</h3>
         <p class="dek">${a.dek}</p>
@@ -483,7 +520,10 @@ function renderGrid(){
 }
 
 // Render ulang seluruh feed (dipakai saat data live masuk / ganti kategori)
-function rebuildFeed(){ renderHero(); renderChips(); renderGrid(); }
+function rebuildFeed(){
+  ARTICLES.forEach((a,i)=>{ if(a.id==null) a.id="s"+i; });
+  renderHero(); renderChips(); renderGrid();
+}
 rebuildFeed();
 
 // Interaksi
@@ -595,9 +635,11 @@ async function loadNews(){
     const rows = await r.json();
     if(!rows.length) return;
     ARTICLES = rows.map((x,i)=>({
+      id: x.id,
       cat: x.category || "DeFi",
       title: x.title || "(tanpa judul)",
       dek: x.dek || "",
+      body: x.body || "",
       src: x.source || "—",
       time: timeAgo(x.created_at),
       url: x.url || "#",
@@ -606,10 +648,57 @@ async function loadNews(){
     }));
     activeCat = "Semua"; shown = 6;
     rebuildFeed();
+    if(firstNews){ firstNews=false; openFromHash(); }
   }catch(e){ /* gagal -> tetap pakai berita contoh */ }
 }
 loadNews();
 setInterval(loadNews, 180000);   // segarkan berita tiap 3 menit
+
+/* ============ HALAMAN BACA ARTIKEL ============ */
+let firstNews = true;
+function escapeHtml(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function findArticle(id){ return ARTICLES.find(a=>String(a.id)===String(id)); }
+
+function openReader(a){
+  if(!a) return;
+  byId("rCat").textContent = labelOf(a.cat);
+  byId("rTitle").textContent = a.title;
+  byId("rMeta").innerHTML = `Sumber <b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ${a.time}`;
+  const text = (a.body && a.body.trim()) ? a.body : (a.dek || "");
+  byId("rBody").innerHTML = text.split(/\n+/).map(p=>p.trim()).filter(Boolean)
+    .map(p=>`<p>${escapeHtml(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
+  const src = byId("rSource");
+  if(a.url && a.url!=="#"){ src.href=a.url; src.style.display=""; } else { src.style.display="none"; }
+  const r = byId("reader");
+  r.classList.add("open"); r.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden"; r.scrollTop=0;
+  if(a.id!=null) history.replaceState(null,"",location.pathname+"#a"+a.id);
+}
+function closeReader(){
+  const r = byId("reader");
+  r.classList.remove("open"); r.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  history.replaceState(null,"",location.pathname);
+}
+function openFromHash(){
+  const m = location.hash.match(/^#a(.+)$/); if(!m) return;
+  openReader(findArticle(m[1]));
+}
+
+byId("readerClose").addEventListener("click", closeReader);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeReader(); });
+
+// Klik kartu / judul -> buka artikel DI SITUS (bukan ke sumber asing)
+document.addEventListener("click", e=>{
+  const el = e.target.closest("[data-open]"); if(!el) return;
+  e.preventDefault(); openReader(findArticle(el.getAttribute("data-open")));
+});
+document.addEventListener("keydown", e=>{
+  if(e.key!=="Enter") return;
+  const el = e.target.closest("[data-open]"); if(!el) return;
+  e.preventDefault(); openReader(findArticle(el.getAttribute("data-open")));
+});
+openFromHash();
 
 $("#yr").textContent = new Date().getFullYear();
 </script>
