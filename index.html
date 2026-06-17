@@ -345,7 +345,7 @@
    UBAH ISINYA, DAN TARUH DI URUTAN PALING ATAS (yang terbaru di atas).
    featured:true  -> dipakai sebagai berita utama (Hero). Cukup 1 saja.
    ================================================================= */
-const ARTICLES = [
+let ARTICLES = [
   { cat:"Tokenized Stocks", featured:true,
     title:"Volume Tokenisasi Saham Global Tembus Rekor Bulanan",
     dek:"Lonjakan minat investor institusional mendorong perdagangan saham tertokenisasi ke level tertinggi, membuka pertanyaan baru soal akses pasar 24/7 di Indonesia.",
@@ -427,7 +427,7 @@ function renderTicker(){
 renderTicker();
 
 // Hero
-(function(){
+function renderHero(){
   const lead = ARTICLES.find(a=>a.featured) || ARTICLES[0];
   $("#heroLead").innerHTML = `
     <span class="eyebrow">${lead.cat}</span>
@@ -441,19 +441,19 @@ renderTicker();
       <div class="meta">${a.src} · ${a.time}</div>
     </div>`).join("");
   $("#heroSecs").innerHTML = secs;
-})();
+}
 
 // Kategori + filter
-const CATS = ["Semua", ...[...new Set(ARTICLES.map(a=>a.cat))]];
 let activeCat = "Semua";
 let shown = 6;
 
 function labelOf(c){
   return {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"}[c] || c;
 }
+function currentCats(){ return ["Semua", ...new Set(ARTICLES.map(a=>a.cat))]; }
 
 function renderChips(){
-  $("#chips").innerHTML = CATS.map(c=>
+  $("#chips").innerHTML = currentCats().map(c=>
     `<button class="chip ${c===activeCat?'on':''}" data-cat="${c}">${labelOf(c)}</button>`).join("");
 }
 
@@ -482,7 +482,9 @@ function renderGrid(){
   $("#moreBtn").style.display = list.length > shown ? "" : "none";
 }
 
-renderChips(); renderGrid();
+// Render ulang seluruh feed (dipakai saat data live masuk / ganti kategori)
+function rebuildFeed(){ renderHero(); renderChips(); renderGrid(); }
+rebuildFeed();
 
 // Interaksi
 $("#chips").addEventListener("click", e=>{
@@ -566,6 +568,48 @@ async function loadSignals(){
 loadPrices(); loadSignals();
 setInterval(loadPrices, 60000);    // harga: tiap 1 menit
 setInterval(loadSignals, 120000);  // sinyal: tiap 2 menit
+
+/* ============ BERITA LIVE dari Supabase (anon key, BACA-SAJA) ============
+   GANTI 2 nilai di bawah dengan milik Anda:
+   - SUPA_URL  : Project URL Supabase (mis. https://xxxx.supabase.co)
+   - SUPA_ANON : anon/public key (BUKAN service_role!). Aman tampil di web
+                 karena tabel published_news diatur baca-saja (RLS).
+   Sebelum diisi, situs memakai berita contoh di array ARTICLES. */
+const SUPA_URL  = "https://mledqkynatqkqlrnrfmz.supabase.co";   // contoh: https://mledqkynatqkqlrnrfmz.supabase.co
+const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
+
+function timeAgo(iso){
+  const s = (Date.now() - new Date(iso).getTime())/1000;
+  if(s < 60)    return "baru saja";
+  if(s < 3600)  return Math.floor(s/60)+" menit lalu";
+  if(s < 86400) return Math.floor(s/3600)+" jam lalu";
+  return Math.floor(s/86400)+" hari lalu";
+}
+
+async function loadNews(){
+  if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")) return; // belum dikonfigurasi
+  try{
+    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&order=created_at.desc&limit=40`,
+      { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
+    if(!r.ok) return;
+    const rows = await r.json();
+    if(!rows.length) return;
+    ARTICLES = rows.map((x,i)=>({
+      cat: x.category || "DeFi",
+      title: x.title || "(tanpa judul)",
+      dek: x.dek || "",
+      src: x.source || "—",
+      time: timeAgo(x.created_at),
+      url: x.url || "#",
+      featured: i===0,
+      live: (x.priority||"").toLowerCase()==="high",
+    }));
+    activeCat = "Semua"; shown = 6;
+    rebuildFeed();
+  }catch(e){ /* gagal -> tetap pakai berita contoh */ }
+}
+loadNews();
+setInterval(loadNews, 180000);   // segarkan berita tiap 3 menit
 
 $("#yr").textContent = new Date().getFullYear();
 </script>
