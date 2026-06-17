@@ -112,7 +112,7 @@
   .sig{background:var(--ink-2); padding:18px 20px;}
   .sig .k{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
   .sig .v{font-family:"Fraunces",serif; font-size:1.7rem; font-weight:600; margin-top:6px;}
-  .sig .c{font-family:"IBM Plex Mono",monospace; font-size:.74rem; margin-top:2px;}
+  .sig .c{font-family:"IBM Plex Mono",monospace; font-size:.74rem; margin-top:2px; color:var(--faint);}
   .sig .c.up{color:var(--up);} .sig .c.down{color:var(--down);}
 
   /* ---------- SECTION HEAD + FILTER ---------- */
@@ -272,10 +272,10 @@
 
   <!-- ===== MARKET SIGNALS ===== -->
   <section class="signals" aria-label="Sinyal pasar">
-    <div class="sig"><div class="k">DeFi TVL</div><div class="v">$118.4B</div><div class="c up">▲ 2.4% / 24j</div></div>
-    <div class="sig"><div class="k">RWA On-Chain</div><div class="v">$24.7B</div><div class="c up">▲ 5.1% / 7h</div></div>
-    <div class="sig"><div class="k">Stablecoin Cap</div><div class="v">$248B</div><div class="c up">▲ 0.8% / 24j</div></div>
-    <div class="sig"><div class="k">BTC Dominance</div><div class="v">54.3%</div><div class="c down">▼ 0.3% / 24j</div></div>
+    <div class="sig"><div class="k">DeFi TVL</div><div class="v" id="sig-tvl">—</div><div class="c">semua chain · DeFiLlama</div></div>
+    <div class="sig"><div class="k">Kripto Mkt Cap</div><div class="v" id="sig-mcap">—</div><div class="c" id="sig-mcap-c">memuat…</div></div>
+    <div class="sig"><div class="k">BTC Dominance</div><div class="v" id="sig-btcd">—</div><div class="c">dari total market cap</div></div>
+    <div class="sig"><div class="k">Volume 24j</div><div class="v" id="sig-vol">—</div><div class="c">seluruh pasar kripto</div></div>
   </section>
 
   <!-- ===== FEED ===== -->
@@ -407,22 +407,24 @@ const ARTICLES = [
     src:"Financial Times", time:"1 hari lalu", url:"#" },
 ];
 
-/* ----- ticker pasar (contoh data; ganti dengan harga riil bila mau) ----- */
-const TICKER = [
-  ["BTC","$64,820","+1.8%",1],["ETH","$3,410","+2.3%",1],["SOL","$172.40","+4.1%",1],
+/* ----- ticker pasar: koin (id CoinGecko -> simbol). Harga ditarik LIVE. ----- */
+const COINS = [["bitcoin","BTC"],["ethereum","ETH"],["solana","SOL"],["binancecoin","BNB"],
+  ["ripple","XRP"],["avalanche-2","AVAX"],["chainlink","LINK"],["ondo-finance","ONDO"]];
+/* nilai awal (tampil dulu & jadi cadangan bila API gagal) */
+let TICK = [["BTC","$64,820","+1.8%",1],["ETH","$3,410","+2.3%",1],["SOL","$172.40","+4.1%",1],
   ["BNB","$598.20","-0.6%",0],["XRP","$0.612","+0.9%",1],["AVAX","$38.05","-1.2%",0],
-  ["LINK","$18.74","+3.0%",1],["ONDO","$1.42","+6.7%",1],["DeFi TVL","$118.4B","+2.4%",1],
-];
+  ["LINK","$18.74","+3.0%",1],["ONDO","$1.42","+6.7%",1]];
 
 /* ====================== RENDER ====================== */
 const $ = s => document.querySelector(s);
 
-// Ticker (digandakan agar gulir mulus)
-(function(){
-  const make = ()=>TICKER.map(([s,p,c,up])=>
+// Ticker (digandakan agar gulir mulus) — bisa di-render ulang saat data live masuk
+function renderTicker(){
+  const make = ()=>TICK.map(([s,p,c,up])=>
     `<span class="tk"><b>${s}</b>${p} <span class="${up?'up':'down'}">${c}</span><span class="dot"> ◆ </span></span>`).join("");
   $("#ticker").innerHTML = make()+make();
-})();
+}
+renderTicker();
 
 // Hero
 (function(){
@@ -509,6 +511,61 @@ $("#subForm").addEventListener("submit", e=>{
   e.target.querySelector("input").value = "";
   setTimeout(()=>{ btn.textContent="Berlangganan"; btn.style.background="var(--gold)"; }, 2200);
 });
+
+/* ============ DATA PASAR LIVE (gratis, tanpa API key) ============
+   Harga koin: CoinGecko. Sinyal pasar: CoinGecko global + DeFiLlama.
+   Update tiap menit. Kalau API gagal/lambat, angka cadangan tetap tampil. */
+const byId = id => document.getElementById(id);
+function fmtPrice(n){ return n>=1 ? "$"+n.toLocaleString("en-US",{maximumFractionDigits:2}) : "$"+n.toFixed(4); }
+function fmtChg(c){ return (c>=0?"+":"")+c.toFixed(1)+"%"; }
+function fmtBig(n){
+  if(n>=1e12) return "$"+(n/1e12).toFixed(2)+"T";
+  if(n>=1e9)  return "$"+(n/1e9).toFixed(1)+"B";
+  if(n>=1e6)  return "$"+(n/1e6).toFixed(1)+"M";
+  return "$"+Math.round(n).toLocaleString();
+}
+
+async function loadPrices(){
+  try{
+    const ids = COINS.map(c=>c[0]).join(",");
+    const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+    if(!r.ok) return;
+    const d = await r.json();
+    TICK = COINS.map(([id,sym])=>{
+      const o = d[id]; if(!o) return [sym,"—","",1];
+      const chg = o.usd_24h_change || 0;
+      return [sym, fmtPrice(o.usd), fmtChg(chg), chg>=0?1:0];
+    });
+    renderTicker();
+  }catch(e){ /* biarkan nilai cadangan */ }
+}
+
+async function loadSignals(){
+  try{
+    const [gR,lR] = await Promise.all([
+      fetch("https://api.coingecko.com/api/v3/global"),
+      fetch("https://api.llama.fi/v2/chains")
+    ]);
+    if(gR.ok){
+      const g = (await gR.json()).data;
+      byId("sig-mcap").textContent = fmtBig(g.total_market_cap.usd);
+      const mc = g.market_cap_change_percentage_24h_usd || 0;
+      const c = byId("sig-mcap-c");
+      c.textContent = (mc>=0?"▲ ":"▼ ")+Math.abs(mc).toFixed(1)+"% / 24j";
+      c.className = "c "+(mc>=0?"up":"down");
+      byId("sig-btcd").textContent = g.market_cap_percentage.btc.toFixed(1)+"%";
+      byId("sig-vol").textContent  = fmtBig(g.total_volume.usd);
+    }
+    if(lR.ok){
+      const chains = await lR.json();
+      byId("sig-tvl").textContent = fmtBig(chains.reduce((s,c)=>s+(c.tvl||0),0));
+    }
+  }catch(e){ /* biarkan tampilan apa adanya */ }
+}
+
+loadPrices(); loadSignals();
+setInterval(loadPrices, 60000);    // harga: tiap 1 menit
+setInterval(loadSignals, 120000);  // sinyal: tiap 2 menit
 
 $("#yr").textContent = new Date().getFullYear();
 </script>
