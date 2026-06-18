@@ -383,6 +383,15 @@
 </footer>
 
 <script>
+/* ============ KONFIGURASI — ISI 3 NILAI INI ============
+   - SUPA_URL  : Project URL Supabase (mis. https://xxxx.supabase.co)
+   - SUPA_ANON : anon/public key (BUKAN service_role!). Aman di web (tabel baca-saja).
+   - TELEGRAM_URL : link channel Telegram Anda (mis. https://t.me/namachannel).
+   Sebelum diisi, situs memakai berita contoh & tombol Telegram disembunyikan. */
+const SUPA_URL     = "https://mledqkynatqkqlrnrfmz.supabase.co";
+const SUPA_ANON    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
+const TELEGRAM_URL = "https://t.me/DeFiCryptoMedia";
+
 /* =================================================================
    DATA BERITA — UNTUK MENAMBAH ARTIKEL, SALIN SATU BLOK { } DI BAWAH,
    UBAH ISINYA, DAN TARUH DI URUTAN PALING ATAS (yang terbaru di atas).
@@ -638,14 +647,7 @@ setInterval(loadPrices, 60000);    // harga: tiap 1 menit
 setInterval(loadSignals, 120000);  // sinyal: tiap 2 menit
 
 /* ============ BERITA LIVE dari Supabase (anon key, BACA-SAJA) ============
-   GANTI 2 nilai di bawah dengan milik Anda:
-   - SUPA_URL  : Project URL Supabase (mis. https://xxxx.supabase.co)
-   - SUPA_ANON : anon/public key (BUKAN service_role!). Aman tampil di web
-                 karena tabel published_news diatur baca-saja (RLS).
-   Sebelum diisi, situs memakai berita contoh di array ARTICLES. */
-const SUPA_URL  = "https://mledqkynatqkqlrnrfmz.supabase.co";   // contoh: https://mledqkynatqkqlrnrfmz.supabase.co
-const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
-const TELEGRAM_URL = "https://t.me/DeFiCryptoMedia";   // contoh: https://t.me/namachannelanda
+   Konfigurasi SUPA_URL / SUPA_ANON / TELEGRAM_URL ada di ATAS skrip. */
 
 function timeAgo(iso){
   const s = (Date.now() - new Date(iso).getTime())/1000;
