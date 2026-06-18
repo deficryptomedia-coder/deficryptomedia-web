@@ -50,7 +50,7 @@
   }
   .ticker-track{
     display:inline-flex; gap:34px; padding:9px 0; align-items:center;
-    animation:scroll 38s linear infinite; will-change:transform;
+    will-change:transform;
   }
   .ticker:hover .ticker-track{animation-play-state:paused;}
   @keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
@@ -225,7 +225,7 @@
     .lead h1{font-size:2rem;}
   }
   @media(prefers-reduced-motion:reduce){
-    .ticker-track{animation:none;}
+    /* ticker tetap bergerak (informasi harga); animasi lain dimatikan */
     .card{opacity:1; transform:none;}
     html{scroll-behavior:auto;}
   }
@@ -477,6 +477,29 @@ function renderTicker(){
   $("#ticker").innerHTML = make()+make();
 }
 renderTicker();
+
+// Gerakkan ticker via JavaScript (tetap jalan walau animasi CSS dimatikan HP).
+(function tickerMotion(){
+  const track = $("#ticker");
+  const wrap = track.parentElement;
+  let x = 0, paused = false;
+  if(wrap){
+    wrap.addEventListener("mouseenter", ()=>paused=true);
+    wrap.addEventListener("mouseleave", ()=>paused=false);
+    wrap.addEventListener("touchstart", ()=>paused=true, {passive:true});
+    wrap.addEventListener("touchend",   ()=>paused=false, {passive:true});
+  }
+  function step(){
+    if(!paused){
+      x -= 0.6;                          // kecepatan gulir (px per frame)
+      const half = track.scrollWidth / 2;
+      if(half && -x >= half) x += half;  // ulang mulus (track digandakan 2x)
+      track.style.transform = "translateX(" + x + "px)";
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
 
 // Hero
 function renderHero(){
