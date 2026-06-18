@@ -166,6 +166,9 @@
     font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.78rem; letter-spacing:.04em;
     text-transform:uppercase; cursor:pointer; white-space:nowrap;}
   .promo button:hover{filter:brightness(1.07);}
+  .tg-join{display:inline-block; margin-top:13px; font-family:"IBM Plex Mono",monospace;
+    font-size:.78rem; letter-spacing:.03em; color:var(--gold);}
+  .tg-join:hover{text-decoration:underline;}
 
   /* ---------- FOOTER ---------- */
   footer.site{border-top:1px solid var(--line); margin-top:30px; padding:46px 0 60px;}
@@ -319,10 +322,13 @@
       <h2>Berita DeFi &amp; tokenisasi saham, langsung ke Anda.</h2>
       <p>Ringkasan pilihan tiap hari: RWA, stablecoin, regulasi OJK, dan adopsi institusional. Gratis.</p>
     </div>
-    <form class="act" id="subForm">
-      <input type="email" placeholder="email@anda.com" aria-label="Email Anda" required />
-      <button type="submit">Berlangganan</button>
-    </form>
+    <div>
+      <form class="act" id="subForm">
+        <input type="email" placeholder="email@anda.com" aria-label="Email Anda" required />
+        <button type="submit">Berlangganan</button>
+      </form>
+      <a class="tg-join" id="tgJoin" target="_blank" rel="noopener noreferrer">Atau gabung channel Telegram ↗</a>
+    </div>
   </section>
 
 </main>
@@ -545,14 +551,36 @@ $("#menuBtn").addEventListener("click", ()=>{
   document.querySelector("#feed").scrollIntoView({behavior:"smooth"});
 });
 
-// Form langganan (demo)
-$("#subForm").addEventListener("submit", e=>{
+// Form langganan -> simpan email ke Supabase (tabel subscribers)
+$("#subForm").addEventListener("submit", async e=>{
   e.preventDefault();
+  const input = e.target.querySelector("input");
   const btn = e.target.querySelector("button");
-  btn.textContent = "Terkirim ✓"; btn.style.background = "var(--up)";
-  e.target.querySelector("input").value = "";
-  setTimeout(()=>{ btn.textContent="Berlangganan"; btn.style.background="var(--gold)"; }, 2200);
+  const email = (input.value || "").trim();
+  if(!email || !email.includes("@")){ input.focus(); return; }
+  const done = (txt, color)=>{ btn.textContent=txt; btn.style.background="var("+color+")";
+    setTimeout(()=>{ btn.textContent="Berlangganan"; btn.style.background="var(--gold)"; }, 2600); };
+  // Kalau Supabase belum dikonfigurasi -> mode demo (anggap sukses)
+  if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")){ input.value=""; done("Terkirim ✓","--up"); return; }
+  btn.textContent = "Mengirim...";
+  try{
+    const r = await fetch(`${SUPA_URL}/rest/v1/subscribers`, {
+      method:"POST",
+      headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON,
+                "Content-Type":"application/json", Prefer:"return=minimal" },
+      body: JSON.stringify({ email })
+    });
+    if(r.ok || r.status===409){ input.value=""; done("Terkirim ✓","--up"); }  // 409 = sudah terdaftar
+    else done("Coba lagi","--down");
+  }catch(err){ done("Coba lagi","--down"); }
 });
+
+// Tombol Gabung Telegram (sembunyikan kalau link belum diisi)
+(function(){
+  const tg = document.getElementById("tgJoin");
+  if(TELEGRAM_URL && !TELEGRAM_URL.startsWith("ISI_")){ tg.href = TELEGRAM_URL; }
+  else { tg.style.display = "none"; }
+})();
 
 /* ============ DATA PASAR LIVE (gratis, tanpa API key) ============
    Harga koin: CoinGecko. Sinyal pasar: CoinGecko global + DeFiLlama.
@@ -617,6 +645,7 @@ setInterval(loadSignals, 120000);  // sinyal: tiap 2 menit
    Sebelum diisi, situs memakai berita contoh di array ARTICLES. */
 const SUPA_URL  = "https://mledqkynatqkqlrnrfmz.supabase.co";   // contoh: https://mledqkynatqkqlrnrfmz.supabase.co
 const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
+const TELEGRAM_URL = "https://t.me/DeFiCryptoMedia";   // contoh: https://t.me/namachannelanda
 
 function timeAgo(iso){
   const s = (Date.now() - new Date(iso).getTime())/1000;
