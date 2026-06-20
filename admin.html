@@ -220,11 +220,14 @@ $("loginBtn").addEventListener("click", async ()=>{
   if(!email || !password){ st.textContent = "Isi email dan kata sandi."; return; }
   $("loginBtn").disabled = true; $("loginBtn").textContent = "Memproses…";
   try{
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+    const { error } = await Promise.race([
+      sb.auth.signInWithPassword({ email, password }),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error("Waktu habis — jaringan/Supabase lambat. Coba lagi.")), 15000)),
+    ]);
     if(error){ st.textContent = "Gagal masuk: " + error.message; }
     else { $("password").value = ""; }
   }catch(err){
-    st.textContent = "Gagal terhubung: " + ((err && err.message) ? err.message : err);
+    st.textContent = ((err && err.message) ? err.message : String(err));
   }finally{
     $("loginBtn").disabled = false; $("loginBtn").textContent = "Masuk";
   }
