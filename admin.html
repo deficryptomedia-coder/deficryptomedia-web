@@ -128,8 +128,8 @@
 <!-- ============ APP (setelah login) ============ -->
 <main class="wrap hide" id="appView">
 
-  <h1 class="title">Tulis artikel baru</h1>
-  <p class="sub">Isi form, klik Terbitkan. Artikel langsung muncul di situs dalam &le; 3 menit.</p>
+  <h1 class="title" id="formTitle">Tulis artikel baru</h1>
+  <p class="sub" id="formSub">Isi form, klik Terbitkan. Artikel langsung muncul di situs dalam &le; 3 menit.</p>
 
   <div class="card">
     <label for="f-cat">Kategori</label>
@@ -140,6 +140,7 @@
       <option value="Stablecoin">Stablecoin</option>
       <option value="Regulasi">Regulasi</option>
       <option value="Institutional">Institusional</option>
+      <option value="Artikel">Artikel (kanal editorial)</option>
     </select>
 
     <label for="f-title">Judul</label>
@@ -170,6 +171,7 @@
 
     <div class="actions">
       <button class="btn gold" id="publishBtn">Terbitkan artikel</button>
+      <button class="btn" id="cancelEditBtn" style="display:none">Batal edit</button>
       <button class="btn" id="clearBtn">Kosongkan</button>
       <span class="status" id="formStatus"></span>
     </div>
@@ -225,7 +227,9 @@ $("loginBtn").addEventListener("click", async ()=>{
 $("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
 $("logoutBtn").addEventListener("click", ()=> sb.auth.signOut());
 
-/* ---------- TERBITKAN ---------- */
+/* ---------- TERBITKAN / SIMPAN EDIT ---------- */
+let editingId = null;
+
 $("publishBtn").addEventListener("click", async ()=>{
   const st = $("formStatus"); st.className = "status"; st.textContent = "";
   const row = {
@@ -241,20 +245,68 @@ $("publishBtn").addEventListener("click", async ()=>{
   if(!row.title){ st.className="status err"; st.textContent="Judul wajib diisi."; return; }
   if(!row.dek && !row.body){ st.className="status err"; st.textContent="Isi ringkasan atau isi artikel."; return; }
 
-  $("publishBtn").disabled = true; $("publishBtn").textContent = "Menerbitkan…";
-  const { error } = await sb.from("published_news").insert(row);
-  $("publishBtn").disabled = false; $("publishBtn").textContent = "Terbitkan artikel";
+  $("publishBtn").disabled = true;
+  let error;
+  if(editingId){
+    $("publishBtn").textContent = "Menyimpan…";
+    ({ error } = await sb.from("published_news").update(row).eq("id", editingId));
+  }else{
+    $("publishBtn").textContent = "Menerbitkan…";
+    ({ error } = await sb.from("published_news").insert(row));
+  }
+  $("publishBtn").disabled = false;
 
-  if(error){ st.className="status err"; st.textContent = "Gagal: " + error.message; return; }
-  st.className="status ok"; st.textContent = "Terbit ✓ — muncul di situs dalam ≤3 menit.";
+  if(error){
+    st.className="status err"; st.textContent = "Gagal: " + error.message;
+    $("publishBtn").textContent = editingId ? "Simpan perubahan" : "Terbitkan artikel";
+    return;
+  }
+  st.className="status ok";
+  st.textContent = editingId ? "Perubahan tersimpan ✓ — diperbarui di situs dalam ≤3 menit."
+                             : "Terbit ✓ — muncul di situs dalam ≤3 menit.";
   clearForm(); loadList();
 });
 
+// muat data artikel ke form untuk diedit
+async function startEdit(id){
+  const { data, error } = await sb.from("published_news").select("*").eq("id", id).single();
+  if(error){ alert("Gagal memuat artikel: " + error.message); return; }
+  editingId = id;
+  setCat(data.category);
+  $("f-title").value  = data.title || "";
+  $("f-dek").value    = data.dek || "";
+  $("f-body").value   = data.body || "";
+  $("f-source").value = data.source || "";
+  $("f-url").value    = (data.url && data.url!=="#") ? data.url : "";
+  $("f-live").checked = (data.priority||"").toLowerCase()==="high";
+  $("f-show").checked = !!data.show_on_web;
+  $("formTitle").textContent = "Edit artikel";
+  $("formSub").textContent   = "Ubah isi lalu klik Simpan perubahan.";
+  $("publishBtn").textContent = "Simpan perubahan";
+  $("cancelEditBtn").style.display = "";
+  $("formStatus").textContent = "";
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function setCat(c){
+  const sel = $("f-cat");
+  if(c && !Array.from(sel.options).some(o=>o.value===c)){
+    const o = document.createElement("option"); o.value = c; o.textContent = LABEL[c]||c; sel.appendChild(o);
+  }
+  sel.value = c || "DeFi";
+}
+
 function clearForm(){
+  editingId = null;
   ["f-title","f-dek","f-body","f-source","f-url"].forEach(id=>$(id).value="");
   $("f-live").checked = false; $("f-show").checked = true; $("f-cat").value = "DeFi";
+  $("formTitle").textContent = "Tulis artikel baru";
+  $("formSub").textContent   = "Isi form, klik Terbitkan. Artikel langsung muncul di situs dalam ≤3 menit.";
+  $("publishBtn").textContent = "Terbitkan artikel";
+  $("cancelEditBtn").style.display = "none";
 }
 $("clearBtn").addEventListener("click", ()=>{ clearForm(); $("formStatus").textContent=""; });
+$("cancelEditBtn").addEventListener("click", ()=>{ clearForm(); $("formStatus").textContent=""; });
 $("refreshBtn").addEventListener("click", loadList);
 
 /* ---------- DAFTAR + KELOLA ---------- */
@@ -279,6 +331,7 @@ async function loadList(){
       </div>
       ${pill}
       <div class="ops">
+        <button class="btn ghost" data-edit="${a.id}">Edit</button>
         <button class="btn ghost" data-toggle="${a.id}" data-cur="${a.show_on_web}">${toggle}</button>
         <button class="btn ghost danger" data-del="${a.id}">Hapus</button>
       </div>
@@ -287,8 +340,10 @@ async function loadList(){
 }
 
 document.addEventListener("click", async e=>{
+  const ed  = e.target.closest("[data-edit]");
   const tog = e.target.closest("[data-toggle]");
   const del = e.target.closest("[data-del]");
+  if(ed){ startEdit(ed.getAttribute("data-edit")); return; }
   if(tog){
     const id = tog.getAttribute("data-toggle");
     const cur = tog.getAttribute("data-cur")==="true";
