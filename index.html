@@ -86,7 +86,18 @@
     transition:.2s; white-space:nowrap;}
   .sub:hover{background:var(--gold); color:#1a1407; border-color:var(--gold);}
   .menu-btn{display:none; background:none; border:1px solid var(--line-2); color:var(--paper);
-    border-radius:8px; padding:7px 10px; cursor:pointer;}
+    border-radius:8px; padding:7px 10px; cursor:pointer; font-size:1.05rem; line-height:1;}
+
+  /* ---------- MENU MOBILE ---------- */
+  .mnav{display:none; border-top:1px solid var(--line); background:var(--ink-2);}
+  .mnav.open{display:block;}
+  .mnav a{display:block; padding:14px 22px; color:var(--paper); font-size:1rem;
+    border-bottom:1px solid var(--line); font-weight:500; transition:background .15s;}
+  .mnav a:last-child{border-bottom:none;}
+  .mnav a:active{background:var(--ink-3);}
+  .mnav a.msub{color:var(--gold); font-family:"IBM Plex Mono",monospace; font-size:.82rem;
+    letter-spacing:.05em; text-transform:uppercase;}
+  @media(min-width:641px){ .mnav{display:none !important;} }
 
   /* ---------- HERO ---------- */
   .hero{display:grid; grid-template-columns:1.55fr 1fr; gap:42px; padding:54px 0 46px;
@@ -265,6 +276,16 @@
       <button class="menu-btn" id="menuBtn" aria-label="Buka menu">☰</button>
     </div>
   </div>
+  <nav class="mnav" id="mobileMenu" aria-label="Menu seluler">
+    <a href="#feed" data-jump="Semua">Semua Artikel</a>
+    <a href="#feed" data-jump="DeFi">DeFi</a>
+    <a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a>
+    <a href="#feed" data-jump="RWA">RWA</a>
+    <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
+    <a href="#feed" data-jump="Regulasi">Regulasi</a>
+    <a href="#feed" data-jump="Institutional">Institusional</a>
+    <a href="#langganan" class="msub">Berlangganan</a>
+  </nav>
 </header>
 
 <main class="wrap" id="top">
@@ -588,9 +609,18 @@ document.querySelectorAll("[data-jump]").forEach(a=>{
   });
 });
 
-// Menu mobile -> tampilkan chips sebagai navigasi
-$("#menuBtn").addEventListener("click", ()=>{
-  document.querySelector("#feed").scrollIntoView({behavior:"smooth"});
+// Menu mobile -> buka/tutup daftar menu
+const mobileMenu = $("#mobileMenu"), menuBtn = $("#menuBtn");
+function setMenu(open){
+  mobileMenu.classList.toggle("open", open);
+  menuBtn.textContent = open ? "✕" : "☰";
+  menuBtn.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
+}
+menuBtn.addEventListener("click", e=>{ e.stopPropagation(); setMenu(!mobileMenu.classList.contains("open")); });
+// Tutup menu setelah memilih item, atau saat klik di luar
+mobileMenu.querySelectorAll("a").forEach(a=> a.addEventListener("click", ()=> setMenu(false)));
+document.addEventListener("click", e=>{
+  if(mobileMenu.classList.contains("open") && !mobileMenu.contains(e.target) && e.target!==menuBtn) setMenu(false);
 });
 
 // Form langganan -> simpan email ke Supabase (tabel subscribers)
