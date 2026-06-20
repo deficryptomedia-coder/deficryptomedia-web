@@ -776,8 +776,15 @@ function openReader(a){
   byId("rTitle").textContent = a.title;
   byId("rMeta").innerHTML = `Sumber <b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ${a.time}`;
   const text = (a.body && a.body.trim()) ? a.body : (a.dek || "");
-  byId("rBody").innerHTML = text.split(/\n+/).map(p=>p.trim()).filter(Boolean)
-    .map(p=>`<p>${fmtInline(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
+  let paras = text.split(/\n+/).map(p=>p.trim()).filter(Boolean);
+  const norm = s => (s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+  const titleN = norm(a.title);
+  while(paras.length){
+    const n = norm(paras[0]);
+    if(n && (n===titleN || n==="artikel lengkap" || n==="artikel" || n==="isi artikel" || n==="ringkasan" || n==="judul")) paras.shift();
+    else break;
+  }
+  byId("rBody").innerHTML = paras.map(p=>`<p>${fmtInline(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
   const src = byId("rSource");
   if(a.url && a.url!=="#"){ src.href=a.url; src.style.display=""; } else { src.style.display="none"; }
   const r = byId("reader");
