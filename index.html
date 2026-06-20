@@ -269,7 +269,7 @@
       <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
       <a href="#feed" data-jump="Regulasi">Regulasi</a>
       <a href="#feed" data-jump="Institutional">Institusional</a>
-      <a href="#feed" data-jump="Semua">Artikel</a>
+      <a href="#feed" data-jump="Artikel">Artikel</a>
     </nav>
     <div class="bar-right">
       <a class="sub" href="#langganan">Berlangganan</a>
@@ -277,13 +277,14 @@
     </div>
   </div>
   <nav class="mnav" id="mobileMenu" aria-label="Menu seluler">
-    <a href="#feed" data-jump="Semua">Semua Artikel</a>
+    <a href="#feed" data-jump="Semua">Semua Berita</a>
     <a href="#feed" data-jump="DeFi">DeFi</a>
     <a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a>
     <a href="#feed" data-jump="RWA">RWA</a>
     <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
     <a href="#feed" data-jump="Regulasi">Regulasi</a>
     <a href="#feed" data-jump="Institutional">Institusional</a>
+    <a href="#feed" data-jump="Artikel">Artikel</a>
     <a href="#langganan" class="msub">Berlangganan</a>
   </nav>
 </header>
@@ -534,13 +535,15 @@ renderTicker();
 
 // Hero
 function renderHero(){
-  const lead = ARTICLES.find(a=>a.featured) || ARTICLES[0];
+  const news = ARTICLES.filter(a=>a.cat!=="Artikel");
+  const lead = news.find(a=>a.featured) || news[0];
+  if(!lead){ $("#heroLead").innerHTML=""; $("#heroSecs").innerHTML=""; return; }
   $("#heroLead").innerHTML = `
     <span class="eyebrow">${labelOf(lead.cat)}</span>
     <h1><a href="#" data-open="${lead.id}">${lead.title}</a></h1>
     <p class="dek">${lead.dek}</p>
     <p class="byline">Sumber <b>${lead.src}</b> &nbsp;·&nbsp; ${lead.time}</p>`;
-  const secs = ARTICLES.filter(a=>!a.featured).slice(0,3).map(a=>`
+  const secs = news.filter(a=>a!==lead).slice(0,3).map(a=>`
     <div class="sec">
       <div class="eyebrow"><b>${labelOf(a.cat)}</b></div>
       <h3><a href="#" data-open="${a.id}">${a.title}</a></h3>
@@ -556,7 +559,12 @@ let shown = 6;
 function labelOf(c){
   return {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"}[c] || c;
 }
-function currentCats(){ return ["Semua", ...new Set(ARTICLES.map(a=>a.cat))]; }
+function currentCats(){
+  const cats = [...new Set(ARTICLES.filter(a=>a.cat!=="Artikel").map(a=>a.cat))];
+  const list = ["Semua", ...cats];
+  if(ARTICLES.some(a=>a.cat==="Artikel")) list.push("Artikel");
+  return list;
+}
 
 function renderChips(){
   $("#chips").innerHTML = currentCats().map(c=>
@@ -564,7 +572,10 @@ function renderChips(){
 }
 
 function feedList(){
-  const pool = ARTICLES.filter(a=>!a.featured);
+  if(activeCat==="Artikel") return ARTICLES.filter(a=>a.cat==="Artikel");
+  const news = ARTICLES.filter(a=>a.cat!=="Artikel");
+  const lead = news.find(a=>a.featured) || news[0];
+  const pool = news.filter(a=>a!==lead);
   return activeCat==="Semua" ? pool : pool.filter(a=>a.cat===activeCat);
 }
 
@@ -572,7 +583,7 @@ function renderGrid(){
   const list = feedList();
   const slice = list.slice(0, shown);
   const grid = $("#grid");
-  if(!slice.length){ grid.innerHTML = `<div class="empty">Belum ada berita di kanal ini.</div>`; }
+  if(!slice.length){ grid.innerHTML = `<div class="empty">${activeCat==="Artikel"?"Belum ada artikel.":"Belum ada berita di kanal ini."}</div>`; }
   else{
     grid.innerHTML = slice.map(a=>`
       <article class="card" data-open="${a.id}" tabindex="0" role="button" aria-label="Buka artikel">
@@ -751,6 +762,12 @@ setInterval(loadNews, 180000);   // segarkan berita tiap 3 menit
 /* ============ HALAMAN BACA ARTIKEL ============ */
 let firstNews = true;
 function escapeHtml(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+// Escape dulu (aman dari HTML), lalu ubah *teks* / _teks_ menjadi italic
+function fmtInline(s){
+  return escapeHtml(s)
+    .replace(/\*([^*\n]+)\*/g, "<em>$1</em>")
+    .replace(/(^|[\s(])_([^_\n]+)_(?=[\s).,!?:;]|$)/g, "$1<em>$2</em>");
+}
 function findArticle(id){ return ARTICLES.find(a=>String(a.id)===String(id)); }
 
 function openReader(a){
@@ -760,7 +777,7 @@ function openReader(a){
   byId("rMeta").innerHTML = `Sumber <b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ${a.time}`;
   const text = (a.body && a.body.trim()) ? a.body : (a.dek || "");
   byId("rBody").innerHTML = text.split(/\n+/).map(p=>p.trim()).filter(Boolean)
-    .map(p=>`<p>${escapeHtml(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
+    .map(p=>`<p>${fmtInline(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
   const src = byId("rSource");
   if(a.url && a.url!=="#"){ src.href=a.url; src.style.display=""; } else { src.style.display="none"; }
   const r = byId("reader");
