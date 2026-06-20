@@ -219,10 +219,15 @@ $("loginBtn").addEventListener("click", async ()=>{
   const st = $("loginStatus"); st.textContent = "";
   if(!email || !password){ st.textContent = "Isi email dan kata sandi."; return; }
   $("loginBtn").disabled = true; $("loginBtn").textContent = "Memproses…";
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  $("loginBtn").disabled = false; $("loginBtn").textContent = "Masuk";
-  if(error){ st.textContent = "Gagal masuk: " + error.message; }
-  else { $("password").value = ""; }
+  try{
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if(error){ st.textContent = "Gagal masuk: " + error.message; }
+    else { $("password").value = ""; }
+  }catch(err){
+    st.textContent = "Gagal terhubung: " + ((err && err.message) ? err.message : err);
+  }finally{
+    $("loginBtn").disabled = false; $("loginBtn").textContent = "Masuk";
+  }
 });
 $("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
 $("logoutBtn").addEventListener("click", ()=> sb.auth.signOut());
