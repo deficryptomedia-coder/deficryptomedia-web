@@ -74,6 +74,13 @@
   nav.main a::after{content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px;
     background:var(--gold); transform:scaleX(0); transition:transform .22s ease; transform-origin:left;}
   nav.main a:hover::after{transform:scaleX(1);}
+  .bar-right{display:flex; align-items:center; gap:20px;}
+  .nav-artikel{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--muted); font-weight:500; padding:8px 4px; white-space:nowrap; transition:color .2s; position:relative;}
+  .nav-artikel:hover{color:var(--paper);}
+  .nav-artikel::after{content:""; position:absolute; left:4px; right:4px; bottom:2px; height:2px;
+    background:var(--gold); transform:scaleX(0); transition:transform .22s ease; transform-origin:left;}
+  .nav-artikel:hover::after{transform:scaleX(1);}
   .sub{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
     border:1px solid var(--line-2); color:var(--paper); padding:8px 14px; border-radius:999px;
     transition:.2s; white-space:nowrap;}
@@ -251,9 +258,12 @@
       <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
       <a href="#feed" data-jump="Regulasi">Regulasi</a>
       <a href="#feed" data-jump="Institutional">Institusional</a>
+      <a href="#feed">Artikel</a>
     </nav>
-    <a class="sub" href="#langganan">Berlangganan</a>
-    <button class="menu-btn" id="menuBtn" aria-label="Buka menu">☰</button>
+    <div class="bar-right">
+      <a class="sub" href="#langganan">Berlangganan</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Buka menu">☰</button>
+    </div>
   </div>
 </header>
 
