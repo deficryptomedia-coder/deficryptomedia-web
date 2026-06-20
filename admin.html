@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin · DEFI · CRYPTO MEDIA</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0D1019; --ink-2:#141926; --ink-3:#1B2230;
+    --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
+    --paper:#ECEAE1; --muted:#97A0B0; --faint:#6B7486;
+    --gold:#E8B65C; --up:#46D6A8; --down:#F0775C;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--ink); color:var(--paper);
+    font-family:"Inter",system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(900px 500px at 85% -5%, rgba(232,182,92,.07), transparent 60%);}
+  a{color:var(--gold); text-decoration:none;}
+  .mono{font-family:"IBM Plex Mono",monospace;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px;}
+
+  header{position:sticky; top:0; z-index:5; background:rgba(13,16,25,.85); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);}
+  .bar{display:flex; align-items:center; justify-content:space-between; height:62px; gap:12px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:"Fraunces",serif; font-weight:600; font-size:1.05rem;}
+  .brand .blk{width:12px; height:12px; background:var(--gold); border-radius:3px; transform:rotate(45deg);
+    box-shadow:0 0 0 3px rgba(232,182,92,.18);}
+  .brand small{color:var(--muted); font-weight:400; font-family:"IBM Plex Mono",monospace; font-size:.66rem;
+    letter-spacing:.12em; text-transform:uppercase;}
+  .who{display:flex; align-items:center; gap:12px; font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--muted);}
+
+  .btn{font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.04em; cursor:pointer;
+    border:1px solid var(--line-2); background:transparent; color:var(--paper); padding:9px 16px; border-radius:8px;
+    transition:.18s;}
+  .btn:hover{border-color:var(--gold); color:var(--gold);}
+  .btn.gold{background:var(--gold); color:#1a1407; border-color:var(--gold); font-weight:600;}
+  .btn.gold:hover{filter:brightness(1.06); color:#1a1407;}
+  .btn.ghost{padding:6px 11px; font-size:.7rem;}
+  .btn.danger:hover{border-color:var(--down); color:var(--down);}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  h1.title{font-family:"Fraunces",serif; font-weight:600; font-size:1.7rem; margin:30px 0 4px; letter-spacing:-.01em;}
+  .sub{color:var(--muted); font-size:.92rem; margin:0 0 22px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold); font-weight:500;}
+
+  .card{background:var(--ink-2); border:1px solid var(--line); border-radius:14px; padding:24px;}
+  label{display:block; font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); margin:16px 0 6px;}
+  label:first-of-type{margin-top:0;}
+  input[type=text], input[type=email], input[type=password], input[type=url], select, textarea{
+    width:100%; background:var(--ink); color:var(--paper); border:1px solid var(--line-2); border-radius:9px;
+    padding:11px 13px; font-family:"Inter",sans-serif; font-size:.95rem; transition:border-color .18s;}
+  textarea{resize:vertical; line-height:1.6;}
+  input:focus, select:focus, textarea:focus{outline:none; border-color:var(--gold);}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .checks{display:flex; gap:22px; flex-wrap:wrap; margin-top:18px;}
+  .check{display:flex; align-items:center; gap:9px; font-size:.9rem; color:var(--paper); cursor:pointer;}
+  .check input{width:17px; height:17px; accent-color:var(--gold); cursor:pointer;}
+  .hint{font-size:.78rem; color:var(--faint); margin-top:6px;}
+  .actions{display:flex; align-items:center; gap:14px; margin-top:24px;}
+
+  .status{font-family:"IBM Plex Mono",monospace; font-size:.78rem; min-height:1.2em;}
+  .status.ok{color:var(--up);} .status.err{color:var(--down);}
+
+  /* daftar artikel */
+  .list-head{display:flex; align-items:baseline; justify-content:space-between; margin:34px 0 14px;}
+  .list-head h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.2rem; margin:0;}
+  .item{background:var(--ink-2); border:1px solid var(--line); border-radius:11px; padding:14px 16px;
+    display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .item .meta{flex:1; min-width:0;}
+  .item .t{font-weight:500; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .item .m{font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--faint); margin-top:3px; letter-spacing:.03em;}
+  .pill{font-family:"IBM Plex Mono",monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
+    border:1px solid var(--line-2); border-radius:5px; padding:2px 7px; color:var(--muted);}
+  .pill.tayang{color:var(--up); border-color:rgba(70,214,168,.4);}
+  .pill.hidden{color:var(--faint);}
+  .item .ops{display:flex; gap:8px; flex-shrink:0;}
+
+  /* login */
+  .login{max-width:380px; margin:9vh auto 0;}
+  .login .card{padding:30px;}
+  .center-note{text-align:center; color:var(--faint); font-size:.78rem; margin-top:18px;}
+
+  .hide{display:none !important;}
+  @media(max-width:560px){
+    .row{grid-template-columns:1fr;}
+    .item{flex-wrap:wrap;}
+    .item .ops{width:100%;}
+    .item .ops .btn{flex:1;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand"><span class="blk"></span>DEFI · CRYPTO MEDIA <small>Admin</small></div>
+    <div class="who" id="who">
+      <span id="whoEmail"></span>
+      <button class="btn ghost hide" id="logoutBtn">Keluar</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ LOGIN ============ -->
+<section class="login" id="loginView">
+  <div class="card">
+    <span class="eyebrow">Masuk admin</span>
+    <h1 class="title" style="margin-top:8px; font-size:1.4rem;">Kelola artikel</h1>
+    <p class="sub" style="margin-bottom:20px;">Masuk untuk menambah & mengatur berita.</p>
+    <label for="email">Email</label>
+    <input type="email" id="email" autocomplete="username" placeholder="admin@email.com" />
+    <label for="password">Kata sandi</label>
+    <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" />
+    <div class="actions">
+      <button class="btn gold" id="loginBtn" style="width:100%;">Masuk</button>
+    </div>
+    <p class="status err" id="loginStatus" style="margin-top:14px;"></p>
+    <p class="center-note">Lupa sandi? Atur ulang di dashboard Supabase &gt; Authentication.</p>
+  </div>
+</section>
+
+<!-- ============ APP (setelah login) ============ -->
+<main class="wrap hide" id="appView">
+
+  <h1 class="title">Tulis artikel baru</h1>
+  <p class="sub">Isi form, klik Terbitkan. Artikel langsung muncul di situs dalam &le; 3 menit.</p>
+
+  <div class="card">
+    <label for="f-cat">Kategori</label>
+    <select id="f-cat">
+      <option value="DeFi">DeFi</option>
+      <option value="Tokenized Stocks">Tokenisasi Saham</option>
+      <option value="RWA">RWA</option>
+      <option value="Stablecoin">Stablecoin</option>
+      <option value="Regulasi">Regulasi</option>
+      <option value="Institutional">Institusional</option>
+    </select>
+
+    <label for="f-title">Judul</label>
+    <input type="text" id="f-title" placeholder="Judul artikel" />
+
+    <label for="f-dek">Ringkasan singkat (dek)</label>
+    <textarea id="f-dek" rows="2" placeholder="Satu sampai dua kalimat yang tampil di kartu."></textarea>
+
+    <label for="f-body">Isi artikel</label>
+    <textarea id="f-body" rows="9" placeholder="Tulis isi artikel. Pisahkan antar-paragraf dengan satu baris kosong."></textarea>
+    <p class="hint">Antar-paragraf: beri satu baris kosong. Tutup dengan catatan "bukan nasihat keuangan" bila perlu.</p>
+
+    <div class="row">
+      <div>
+        <label for="f-source">Sumber</label>
+        <input type="text" id="f-source" placeholder="mis. Reuters, OJK" />
+      </div>
+      <div>
+        <label for="f-url">Link sumber asli</label>
+        <input type="url" id="f-url" placeholder="https://… (boleh kosong)" />
+      </div>
+    </div>
+
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="f-live" /> Tandai LIVE (breaking)</label>
+      <label class="check"><input type="checkbox" id="f-show" checked /> Tampilkan di website</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn gold" id="publishBtn">Terbitkan artikel</button>
+      <button class="btn" id="clearBtn">Kosongkan</button>
+      <span class="status" id="formStatus"></span>
+    </div>
+  </div>
+
+  <div class="list-head">
+    <h2>Artikel terbaru</h2>
+    <button class="btn ghost" id="refreshBtn">Muat ulang</button>
+  </div>
+  <div id="list"><p class="hint">Memuat…</p></div>
+
+  <p class="center-note" style="margin:26px 0;"><a href="index.html" target="_blank">Lihat situs ↗</a></p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ====== KONFIGURASI — sama dengan index.html (anon key AMAN dipublikasikan) ====== */
+const SUPA_URL  = "https://mledqkynatqkqlrnrfmz.supabase.co";
+const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
+
+const sb = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+const $ = id => document.getElementById(id);
+const LABEL = {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"};
+
+/* ---------- AUTH ---------- */
+async function refreshAuthUI(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(session){
+    $("loginView").classList.add("hide");
+    $("appView").classList.remove("hide");
+    $("logoutBtn").classList.remove("hide");
+    $("whoEmail").textContent = session.user.email;
+    loadList();
+  }else{
+    $("loginView").classList.remove("hide");
+    $("appView").classList.add("hide");
+    $("logoutBtn").classList.add("hide");
+    $("whoEmail").textContent = "";
+  }
+}
+sb.auth.onAuthStateChange(()=>refreshAuthUI());
+
+$("loginBtn").addEventListener("click", async ()=>{
+  const email = $("email").value.trim(), password = $("password").value;
+  const st = $("loginStatus"); st.textContent = "";
+  if(!email || !password){ st.textContent = "Isi email dan kata sandi."; return; }
+  $("loginBtn").disabled = true; $("loginBtn").textContent = "Memproses…";
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  $("loginBtn").disabled = false; $("loginBtn").textContent = "Masuk";
+  if(error){ st.textContent = "Gagal masuk: " + error.message; }
+  else { $("password").value = ""; }
+});
+$("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
+$("logoutBtn").addEventListener("click", ()=> sb.auth.signOut());
+
+/* ---------- TERBITKAN ---------- */
+$("publishBtn").addEventListener("click", async ()=>{
+  const st = $("formStatus"); st.className = "status"; st.textContent = "";
+  const row = {
+    category: $("f-cat").value,
+    title:  $("f-title").value.trim(),
+    dek:    $("f-dek").value.trim(),
+    body:   $("f-body").value.trim(),
+    source: $("f-source").value.trim(),
+    url:    $("f-url").value.trim() || null,
+    priority: $("f-live").checked ? "high" : "normal",
+    show_on_web: $("f-show").checked,
+  };
+  if(!row.title){ st.className="status err"; st.textContent="Judul wajib diisi."; return; }
+  if(!row.dek && !row.body){ st.className="status err"; st.textContent="Isi ringkasan atau isi artikel."; return; }
+
+  $("publishBtn").disabled = true; $("publishBtn").textContent = "Menerbitkan…";
+  const { error } = await sb.from("published_news").insert(row);
+  $("publishBtn").disabled = false; $("publishBtn").textContent = "Terbitkan artikel";
+
+  if(error){ st.className="status err"; st.textContent = "Gagal: " + error.message; return; }
+  st.className="status ok"; st.textContent = "Terbit ✓ — muncul di situs dalam ≤3 menit.";
+  clearForm(); loadList();
+});
+
+function clearForm(){
+  ["f-title","f-dek","f-body","f-source","f-url"].forEach(id=>$(id).value="");
+  $("f-live").checked = false; $("f-show").checked = true; $("f-cat").value = "DeFi";
+}
+$("clearBtn").addEventListener("click", ()=>{ clearForm(); $("formStatus").textContent=""; });
+$("refreshBtn").addEventListener("click", loadList);
+
+/* ---------- DAFTAR + KELOLA ---------- */
+async function loadList(){
+  const box = $("list"); box.innerHTML = '<p class="hint">Memuat…</p>';
+  const { data, error } = await sb.from("published_news")
+    .select("id,category,title,show_on_web,priority,created_at")
+    .order("created_at",{ascending:false}).limit(30);
+  if(error){ box.innerHTML = '<p class="hint" style="color:var(--down)">Gagal memuat: '+error.message+'</p>'; return; }
+  if(!data.length){ box.innerHTML = '<p class="hint">Belum ada artikel.</p>'; return; }
+
+  box.innerHTML = data.map(a=>{
+    const cat = LABEL[a.category] || a.category;
+    const when = new Date(a.created_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+    const live = a.priority==="high" ? ' · LIVE' : '';
+    const pill = a.show_on_web ? '<span class="pill tayang">Tayang</span>' : '<span class="pill hidden">Disembunyikan</span>';
+    const toggle = a.show_on_web ? "Sembunyikan" : "Tampilkan";
+    return `<div class="item">
+      <div class="meta">
+        <div class="t">${esc(a.title)}</div>
+        <div class="m">${esc(cat)} · ${when}${live}</div>
+      </div>
+      ${pill}
+      <div class="ops">
+        <button class="btn ghost" data-toggle="${a.id}" data-cur="${a.show_on_web}">${toggle}</button>
+        <button class="btn ghost danger" data-del="${a.id}">Hapus</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+document.addEventListener("click", async e=>{
+  const tog = e.target.closest("[data-toggle]");
+  const del = e.target.closest("[data-del]");
+  if(tog){
+    const id = tog.getAttribute("data-toggle");
+    const cur = tog.getAttribute("data-cur")==="true";
+    tog.disabled = true;
+    const { error } = await sb.from("published_news").update({show_on_web: !cur}).eq("id", id);
+    if(error){ alert("Gagal: "+error.message); tog.disabled=false; } else loadList();
+  }
+  if(del){
+    const id = del.getAttribute("data-del");
+    if(!confirm("Hapus artikel ini? Tindakan ini permanen.")) return;
+    del.disabled = true;
+    const { error } = await sb.from("published_news").delete().eq("id", id);
+    if(error){ alert("Gagal: "+error.message); del.disabled=false; } else loadList();
+  }
+});
+
+function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+
+refreshAuthUI();
+</script>
+</body>
+</html>
