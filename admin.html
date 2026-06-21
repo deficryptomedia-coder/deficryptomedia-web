@@ -192,7 +192,15 @@
 const SUPA_URL  = "https://mledqkynatqkqlrnrfmz.supabase.co";
 const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
 
-const sb = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+const sb = window.supabase.createClient(SUPA_URL, SUPA_ANON, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: false,
+    // bypass Web Locks (penyebab login menggantung saat ada banyak tab) :
+    lock: (name, acquireTimeout, fn) => fn(),
+  },
+});
 const $ = id => document.getElementById(id);
 const LABEL = {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"};
 
