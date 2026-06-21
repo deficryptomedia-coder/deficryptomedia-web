@@ -222,7 +222,7 @@ $("loginBtn").addEventListener("click", async ()=>{
   try{
     const { error } = await Promise.race([
       sb.auth.signInWithPassword({ email, password }),
-      new Promise((_,rej)=>setTimeout(()=>rej(new Error("Waktu habis — jaringan/Supabase lambat. Coba lagi.")), 15000)),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error("Waktu habis (30 dtk). Coba pakai Chrome biasa (bukan browser dalam-aplikasi) & jaringan lain.")), 30000)),
     ]);
     if(error){ st.textContent = "Gagal masuk: " + error.message; }
     else { $("password").value = ""; }
