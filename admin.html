@@ -99,7 +99,7 @@
 
 <header>
   <div class="wrap bar">
-    <div class="brand"><span class="blk"></span>DEFI · CRYPTO MEDIA <small>Admin</small></div>
+    <div class="brand"><span class="blk"></span>DEFI · CRYPTO MEDIA <small>Admin · v5</small></div>
     <div class="who" id="who">
       <span id="whoEmail"></span>
       <button class="btn ghost hide" id="logoutBtn">Keluar</button>
@@ -121,6 +121,7 @@
       <button class="btn gold" id="loginBtn" style="width:100%;">Masuk</button>
     </div>
     <p class="status err" id="loginStatus" style="margin-top:14px;"></p>
+    <button class="btn" id="testBtn" style="width:100%; margin-top:6px;">Tes koneksi Supabase</button>
     <p class="center-note">Lupa sandi? Atur ulang di dashboard Supabase &gt; Authentication.</p>
   </div>
 </section>
@@ -241,6 +242,22 @@ $("loginBtn").addEventListener("click", async ()=>{
   }
 });
 $("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
+
+// Tes apakah server Auth Supabase hidup & merespons
+$("testBtn").addEventListener("click", async ()=>{
+  const st = $("loginStatus"); st.className = "status"; st.textContent = "Mengetes koneksi…";
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 10000);
+    const r = await fetch(SUPA_URL + "/auth/v1/health", { headers:{ apikey: SUPA_ANON }, signal: ctrl.signal });
+    clearTimeout(t);
+    st.className = r.ok ? "status ok" : "status err";
+    st.textContent = r.ok ? "Auth server hidup ✓ (HTTP 200) — masalah bukan di server." : ("Auth server menjawab HTTP " + r.status);
+  }catch(e){
+    st.className = "status err";
+    st.textContent = "Auth server TIDAK merespons (" + (e.name==="AbortError" ? "timeout 10s" : e.message) + ")";
+  }
+});
 $("logoutBtn").addEventListener("click", ()=> sb.auth.signOut());
 
 /* ---------- TERBITKAN / SIMPAN EDIT ---------- */
