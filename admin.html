@@ -99,7 +99,7 @@
 
 <header>
   <div class="wrap bar">
-    <div class="brand"><span class="blk"></span>DEFI · CRYPTO MEDIA <small>Admin · v5</small></div>
+    <div class="brand"><span class="blk"></span>DEFI · CRYPTO MEDIA <small>Admin · v6</small></div>
     <div class="who" id="who">
       <span id="whoEmail"></span>
       <button class="btn ghost hide" id="logoutBtn">Keluar</button>
@@ -122,6 +122,7 @@
     </div>
     <p class="status err" id="loginStatus" style="margin-top:14px;"></p>
     <button class="btn" id="testBtn" style="width:100%; margin-top:6px;">Tes koneksi Supabase</button>
+    <button class="btn" id="testLoginBtn" style="width:100%; margin-top:6px;">Tes login langsung</button>
     <p class="center-note">Lupa sandi? Atur ulang di dashboard Supabase &gt; Authentication.</p>
   </div>
 </section>
@@ -242,6 +243,35 @@ $("loginBtn").addEventListener("click", async ()=>{
   }
 });
 $("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
+
+// Tes login lewat jalur mentah (tanpa library) untuk pinpoint masalah
+$("testLoginBtn").addEventListener("click", async ()=>{
+  const email = $("email").value.trim(), password = $("password").value;
+  const st = $("loginStatus"); st.className = "status"; st.textContent = "Tes login langsung…";
+  if(!email || !password){ st.className="status err"; st.textContent="Isi email & sandi dulu."; return; }
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 12000);
+    const r = await fetch(SUPA_URL + "/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: { apikey: SUPA_ANON, "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      signal: ctrl.signal,
+    });
+    clearTimeout(t);
+    let j = {}; try{ j = await r.json(); }catch(_){}
+    if(r.ok && j.access_token){
+      st.className = "status ok";
+      st.textContent = "LOGIN BERHASIL (raw) ✓ — kredensial benar. Masalah ada di library; saya bisa ganti metode login.";
+    }else{
+      st.className = "status err";
+      st.textContent = "HTTP " + r.status + ": " + (j.error_description || j.msg || j.error || "gagal");
+    }
+  }catch(e){
+    st.className = "status err";
+    st.textContent = "Gagal: " + (e.name==="AbortError" ? "timeout 12 dtk (POST /token terblokir?)" : e.message);
+  }
+});
 
 // Tes apakah server Auth Supabase hidup & merespons
 $("testBtn").addEventListener("click", async ()=>{
