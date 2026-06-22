@@ -422,6 +422,8 @@
    Sebelum diisi, situs memakai berita contoh & tombol Telegram disembunyikan. */
 const SUPA_URL     = "https://mledqkynatqkqlrnrfmz.supabase.co";
 const SUPA_ANON    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
+// ==== PENANDA SITUS ====  Repo situs pertama: "A".  Untuk repo situs kedua, ubah jadi "B".
+const SITE = "A";
 const TELEGRAM_URL = "https://t.me/DeFiCryptoMedia";
 
 /* =================================================================
@@ -542,7 +544,7 @@ function renderHero(){
     <span class="eyebrow">${labelOf(lead.cat)}</span>
     <h1><a href="#" data-open="${lead.id}">${lead.title}</a></h1>
     <p class="dek">${lead.dek}</p>
-    <p class="byline">Sumber <b>${lead.src}</b> &nbsp;·&nbsp; ${lead.time}</p>`;
+    <p class="byline">${lead.src ? `<b>${lead.src}</b> &nbsp;·&nbsp; ` : ""}${lead.time}</p>`;
   const secs = news.filter(a=>a!==lead).slice(0,3).map(a=>`
     <div class="sec">
       <div class="eyebrow"><b>${labelOf(a.cat)}</b></div>
@@ -734,7 +736,7 @@ function timeAgo(iso){
 async function loadNews(){
   if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")) return; // belum dikonfigurasi
   try{
-    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&show_on_web=eq.true&order=created_at.desc&limit=40`,
+    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&show_on_web=eq.true&site=eq.${SITE}&order=created_at.desc&limit=40`,
       { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
     if(!r.ok) return;
     const rows = await r.json();
@@ -774,7 +776,7 @@ function openReader(a){
   if(!a) return;
   byId("rCat").textContent = labelOf(a.cat);
   byId("rTitle").textContent = a.title;
-  byId("rMeta").innerHTML = `Sumber <b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ${a.time}`;
+  byId("rMeta").innerHTML = `${a.src ? `<b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ` : ""}${a.time}`;
   const text = (a.body && a.body.trim()) ? a.body : (a.dek || "");
   let paras = text.split(/\n+/).map(p=>p.trim()).filter(Boolean);
   const norm = s => (s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
