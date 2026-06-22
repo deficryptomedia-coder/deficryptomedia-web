@@ -3,824 +3,443 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DEFI · CRYPTO MEDIA — Berita DeFi, Tokenisasi Saham & RWA</title>
-<meta name="description" content="Media berita DeFi, tokenisasi saham, RWA, stablecoin, dan adopsi kripto institusional untuk Indonesia." />
+<title>Admin · DEFI · CRYPTO MEDIA</title>
+<meta name="robots" content="noindex, nofollow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#0D1019;          /* latar utama, ink kebiruan */
-    --ink-2:#141926;        /* kartu / panel */
-    --ink-3:#1B2230;        /* hover / raised */
-    --line:rgba(255,255,255,.09);
-    --line-2:rgba(255,255,255,.16);
-    --paper:#ECEAE1;        /* teks utama, off-white hangat */
-    --muted:#97A0B0;        /* teks sekunder */
-    --faint:#6B7486;        /* teks paling redup */
-    --gold:#E8B65C;         /* AKSEN BRAND tunggal (nilai/tokenisasi) */
-    --gold-dim:#9b7c3e;
-    --up:#46D6A8;           /* data naik (khusus pasar) */
-    --down:#F0775C;         /* data turun (khusus pasar) */
-    --maxw:1180px;
+    --ink:#0D1019; --ink-2:#141926; --ink-3:#1B2230;
+    --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
+    --paper:#ECEAE1; --muted:#97A0B0; --faint:#6B7486;
+    --gold:#E8B65C; --up:#46D6A8; --down:#F0775C;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0; background:var(--ink); color:var(--paper);
-    font-family:"Inter",system-ui,sans-serif; line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    background-image:
-      radial-gradient(900px 500px at 85% -5%, rgba(232,182,92,.08), transparent 60%),
-      radial-gradient(700px 500px at 0% 0%, rgba(70,214,168,.05), transparent 55%);
-  }
-  a{color:inherit; text-decoration:none;}
-  ::selection{background:var(--gold); color:#1a1407;}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px;}
+  body{margin:0; background:var(--ink); color:var(--paper);
+    font-family:"Inter",system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(900px 500px at 85% -5%, rgba(232,182,92,.07), transparent 60%);}
+  a{color:var(--gold); text-decoration:none;}
   .mono{font-family:"IBM Plex Mono",monospace;}
-  .eyebrow{
-    font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.16em;
-    text-transform:uppercase; color:var(--gold); font-weight:500;
-  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px;}
 
-  /* ---------- TICKER ---------- */
-  .ticker{
-    border-bottom:1px solid var(--line); background:rgba(0,0,0,.25);
-    overflow:hidden; white-space:nowrap;
-  }
-  .ticker-track{
-    display:inline-flex; gap:34px; padding:9px 0; align-items:center;
-    will-change:transform;
-  }
-  .ticker:hover .ticker-track{animation-play-state:paused;}
-  @keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
-  .tk{font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.02em; color:var(--muted);}
-  .tk b{color:var(--paper); font-weight:600; margin-right:7px;}
-  .tk .up{color:var(--up);} .tk .down{color:var(--down);}
-  .tk .dot{color:var(--faint); margin:0 2px;}
-
-  /* ---------- HEADER ---------- */
-  header.site{position:sticky; top:0; z-index:30; background:rgba(13,16,25,.82);
-    backdrop-filter:blur(12px); border-bottom:1px solid var(--line);}
-  .bar{display:flex; align-items:center; justify-content:space-between; height:66px;}
-  .brand{display:flex; align-items:center; gap:11px; font-family:"Fraunces",serif; font-weight:600;
-    font-size:1.18rem; letter-spacing:.01em;}
-  .brand .blk{width:13px; height:13px; background:var(--gold); border-radius:3px;
-    box-shadow:0 0 0 3px rgba(232,182,92,.18); transform:rotate(45deg);}
-  .brand span{color:var(--muted); font-weight:400;}
-  nav.main{display:flex; gap:26px;}
-  nav.main a{font-size:.83rem; color:var(--muted); font-weight:500; padding:4px 0; position:relative;}
-  nav.main a:hover{color:var(--paper);}
-  nav.main a::after{content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px;
-    background:var(--gold); transform:scaleX(0); transition:transform .22s ease; transform-origin:left;}
-  nav.main a:hover::after{transform:scaleX(1);}
-  .bar-right{display:flex; align-items:center; gap:20px;}
-  .nav-artikel{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
-    color:var(--muted); font-weight:500; padding:8px 4px; white-space:nowrap; transition:color .2s; position:relative;}
-  .nav-artikel:hover{color:var(--paper);}
-  .nav-artikel::after{content:""; position:absolute; left:4px; right:4px; bottom:2px; height:2px;
-    background:var(--gold); transform:scaleX(0); transition:transform .22s ease; transform-origin:left;}
-  .nav-artikel:hover::after{transform:scaleX(1);}
-  .sub{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
-    border:1px solid var(--line-2); color:var(--paper); padding:8px 14px; border-radius:999px;
-    transition:.2s; white-space:nowrap;}
-  .sub:hover{background:var(--gold); color:#1a1407; border-color:var(--gold);}
-  .menu-btn{display:none; background:none; border:1px solid var(--line-2); color:var(--paper);
-    border-radius:8px; padding:7px 10px; cursor:pointer; font-size:1.05rem; line-height:1;}
-
-  /* ---------- MENU MOBILE ---------- */
-  .mnav{display:none; border-top:1px solid var(--line); background:var(--ink-2);}
-  .mnav.open{display:block;}
-  .mnav a{display:block; padding:14px 22px; color:var(--paper); font-size:1rem;
-    border-bottom:1px solid var(--line); font-weight:500; transition:background .15s;}
-  .mnav a:last-child{border-bottom:none;}
-  .mnav a:active{background:var(--ink-3);}
-  .mnav a.msub{color:var(--gold); font-family:"IBM Plex Mono",monospace; font-size:.82rem;
-    letter-spacing:.05em; text-transform:uppercase;}
-  @media(min-width:641px){ .mnav{display:none !important;} }
-
-  /* ---------- HERO ---------- */
-  .hero{display:grid; grid-template-columns:1.55fr 1fr; gap:42px; padding:54px 0 46px;
+  header{position:sticky; top:0; z-index:5; background:rgba(13,16,25,.85); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line);}
-  .lead .eyebrow{margin-bottom:14px; display:inline-block;}
-  .lead h1{font-family:"Fraunces",serif; font-weight:600; line-height:1.04; letter-spacing:-.015em;
-    font-size:clamp(2.1rem,4.6vw,3.6rem); margin:0 0 18px;}
-  .lead h1 a:hover{color:var(--gold);}
-  .lead .dek{font-size:1.06rem; color:var(--muted); max-width:46ch; margin:0 0 20px;}
-  .byline{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--faint); letter-spacing:.03em;}
-  .byline b{color:var(--gold); font-weight:500;}
-  .hero-art{border:1px solid var(--line); border-radius:14px; background:
-      linear-gradient(160deg,#11161f,#0c1017); overflow:hidden; min-height:230px; position:relative;
-      display:flex; align-items:flex-end;}
-  .hero-art svg{position:absolute; inset:0; width:100%; height:100%;}
-  .hero-art .cap{position:relative; padding:16px 18px; font-family:"IBM Plex Mono",monospace;
-    font-size:.72rem; color:var(--muted); letter-spacing:.04em;}
-  .secondaries{display:flex; flex-direction:column; gap:0;}
-  .sec{padding:16px 0; border-top:1px solid var(--line);}
-  .sec:first-child{border-top:none; padding-top:0;}
-  .sec .eyebrow{font-size:.66rem; color:var(--muted);}
-  .sec .eyebrow b{color:var(--gold); font-weight:500;}
-  .sec h3{font-family:"Fraunces",serif; font-weight:500; font-size:1.16rem; line-height:1.2; margin:7px 0 0;}
-  .sec h3 a:hover{color:var(--gold);}
-  .sec .meta{font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--faint); margin-top:7px;}
+  .bar{display:flex; align-items:center; justify-content:space-between; height:62px; gap:12px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:"Fraunces",serif; font-weight:600; font-size:1.05rem;}
+  .brand .blk{width:12px; height:12px; background:var(--gold); border-radius:3px; transform:rotate(45deg);
+    box-shadow:0 0 0 3px rgba(232,182,92,.18);}
+  .brand small{color:var(--muted); font-weight:400; font-family:"IBM Plex Mono",monospace; font-size:.66rem;
+    letter-spacing:.12em; text-transform:uppercase;}
+  .who{display:flex; align-items:center; gap:12px; font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--muted);}
 
-  /* ---------- MARKET SIGNALS ---------- */
-  .signals{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
-    border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:36px 0;}
-  .sig{background:var(--ink-2); padding:18px 20px;}
-  .sig .k{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
-  .sig .v{font-family:"Fraunces",serif; font-size:1.7rem; font-weight:600; margin-top:6px;}
-  .sig .c{font-family:"IBM Plex Mono",monospace; font-size:.74rem; margin-top:2px; color:var(--faint);}
-  .sig .c.up{color:var(--up);} .sig .c.down{color:var(--down);}
-
-  /* ---------- SECTION HEAD + FILTER ---------- */
-  .sect-head{display:flex; align-items:center; justify-content:space-between; gap:16px;
-    margin:8px 0 22px; padding-bottom:14px; border-bottom:1px solid var(--line); flex-wrap:wrap;}
-  .sect-head h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.5rem; margin:0; letter-spacing:-.01em;}
-  .chips{display:flex; gap:8px; flex-wrap:wrap;}
-  .chip{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.04em; color:var(--muted);
-    border:1px solid var(--line-2); background:transparent; padding:6px 13px; border-radius:999px; cursor:pointer;
+  .btn{font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.04em; cursor:pointer;
+    border:1px solid var(--line-2); background:transparent; color:var(--paper); padding:9px 16px; border-radius:8px;
     transition:.18s;}
-  .chip:hover{color:var(--paper); border-color:var(--gold-dim);}
-  .chip.on{background:var(--gold); color:#1a1407; border-color:var(--gold); font-weight:500;}
+  .btn:hover{border-color:var(--gold); color:var(--gold);}
+  .btn.gold{background:var(--gold); color:#1a1407; border-color:var(--gold); font-weight:600;}
+  .btn.gold:hover{filter:brightness(1.06); color:#1a1407;}
+  .btn.ghost{padding:6px 11px; font-size:.7rem;}
+  .btn.danger:hover{border-color:var(--down); color:var(--down);}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
 
-  /* ---------- GRID ---------- */
-  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line);
-    border:1px solid var(--line); border-radius:14px; overflow:hidden;}
-  .card{background:var(--ink-2); padding:22px 22px 24px; display:flex; flex-direction:column; gap:11px;
-    min-height:190px; transition:background .2s; opacity:0; transform:translateY(14px); cursor:pointer;}
-  .card.show{opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease, background .2s;}
-  .card:hover{background:var(--ink-3);}
-  .card .top{display:flex; align-items:center; gap:9px;}
-  .tag{font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.1em; text-transform:uppercase;
-    color:var(--gold); border:1px solid var(--gold-dim); border-radius:4px; padding:2px 7px;}
-  .tag.live{color:var(--down); border-color:rgba(240,119,92,.4);}
-  .card h3{font-family:"Fraunces",serif; font-weight:500; font-size:1.18rem; line-height:1.22; margin:0;}
-  .card:hover h3{color:var(--gold);}
-  .card .dek{font-size:.9rem; color:var(--muted); margin:0; flex:1;}
-  .card .meta{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--faint); letter-spacing:.02em;
-    display:flex; gap:8px; align-items:center;}
-  .card .meta .src{color:var(--muted);}
-  .empty{grid-column:1/-1; background:var(--ink-2); padding:40px; text-align:center; color:var(--muted);
-    font-family:"IBM Plex Mono",monospace; font-size:.85rem;}
+  h1.title{font-family:"Fraunces",serif; font-weight:600; font-size:1.7rem; margin:30px 0 4px; letter-spacing:-.01em;}
+  .sub{color:var(--muted); font-size:.92rem; margin:0 0 22px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold); font-weight:500;}
 
-  .more-row{display:flex; justify-content:center; margin:30px 0 4px;}
-  .more{font-family:"IBM Plex Mono",monospace; font-size:.76rem; letter-spacing:.06em; text-transform:uppercase;
-    border:1px solid var(--line-2); padding:11px 22px; border-radius:999px; color:var(--paper); cursor:pointer;
-    background:transparent; transition:.2s;}
-  .more:hover{border-color:var(--gold); color:var(--gold);}
+  .card{background:var(--ink-2); border:1px solid var(--line); border-radius:14px; padding:24px;}
+  label{display:block; font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); margin:16px 0 6px;}
+  label:first-of-type{margin-top:0;}
+  input[type=text], input[type=email], input[type=password], input[type=url], select, textarea{
+    width:100%; background:var(--ink); color:var(--paper); border:1px solid var(--line-2); border-radius:9px;
+    padding:11px 13px; font-family:"Inter",sans-serif; font-size:.95rem; transition:border-color .18s;}
+  textarea{resize:vertical; line-height:1.6;}
+  input:focus, select:focus, textarea:focus{outline:none; border-color:var(--gold);}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .checks{display:flex; gap:22px; flex-wrap:wrap; margin-top:18px;}
+  .check{display:flex; align-items:center; gap:9px; font-size:.9rem; color:var(--paper); cursor:pointer;}
+  .check input{width:17px; height:17px; accent-color:var(--gold); cursor:pointer;}
+  .hint{font-size:.78rem; color:var(--faint); margin-top:6px;}
+  .actions{display:flex; align-items:center; gap:14px; margin-top:24px;}
 
-  /* ---------- NEWSLETTER STRIP ---------- */
-  .promo{margin:54px 0; border:1px solid var(--line); border-radius:16px; padding:36px;
-    background:linear-gradient(135deg,#151a26,#0f131c);
-    display:grid; grid-template-columns:1.4fr 1fr; gap:30px; align-items:center;}
-  .promo h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.7rem; margin:6px 0 8px; line-height:1.15;}
-  .promo p{color:var(--muted); margin:0; font-size:.96rem;}
-  .promo .act{display:flex; gap:10px;}
-  .promo input{flex:1; background:#0b0e15; border:1px solid var(--line-2); color:var(--paper);
-    padding:13px 15px; border-radius:10px; font-family:"IBM Plex Mono",monospace; font-size:.82rem;}
-  .promo input:focus{outline:2px solid var(--gold); outline-offset:1px;}
-  .promo button{background:var(--gold); color:#1a1407; border:none; padding:13px 20px; border-radius:10px;
-    font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.78rem; letter-spacing:.04em;
-    text-transform:uppercase; cursor:pointer; white-space:nowrap;}
-  .promo button:hover{filter:brightness(1.07);}
-  .tg-join{display:inline-block; margin-top:13px; font-family:"IBM Plex Mono",monospace;
-    font-size:.78rem; letter-spacing:.03em; color:var(--gold);}
-  .tg-join:hover{text-decoration:underline;}
+  .status{font-family:"IBM Plex Mono",monospace; font-size:.78rem; min-height:1.2em;}
+  .status.ok{color:var(--up);} .status.err{color:var(--down);}
 
-  /* ---------- FOOTER ---------- */
-  footer.site{border-top:1px solid var(--line); margin-top:30px; padding:46px 0 60px;}
-  .foot{display:grid; grid-template-columns:2fr 1fr 1fr; gap:30px;}
-  .foot .brand{margin-bottom:12px;}
-  .foot p{color:var(--muted); font-size:.9rem; max-width:42ch; margin:0 0 14px;}
-  .foot h4{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--faint); margin:0 0 14px;}
-  .foot ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px;}
-  .foot ul a{font-size:.88rem; color:var(--muted);} .foot ul a:hover{color:var(--gold);}
-  .legal{margin-top:34px; padding-top:20px; border-top:1px solid var(--line);
-    display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--faint); letter-spacing:.02em;}
-  .disc{color:var(--faint); max-width:62ch; font-size:.74rem; margin-top:10px; line-height:1.5;}
+  /* daftar artikel */
+  .list-head{display:flex; align-items:baseline; justify-content:space-between; margin:34px 0 14px;}
+  .list-head h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.2rem; margin:0;}
+  .item{background:var(--ink-2); border:1px solid var(--line); border-radius:11px; padding:14px 16px;
+    display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .item .meta{flex:1; min-width:0;}
+  .item .t{font-weight:500; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .item .m{font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--faint); margin-top:3px; letter-spacing:.03em;}
+  .pill{font-family:"IBM Plex Mono",monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
+    border:1px solid var(--line-2); border-radius:5px; padding:2px 7px; color:var(--muted);}
+  .pill.tayang{color:var(--up); border-color:rgba(70,214,168,.4);}
+  .pill.hidden{color:var(--faint);}
+  .item .ops{display:flex; gap:8px; flex-shrink:0;}
 
-  /* ---------- READER (halaman baca artikel) ---------- */
-  .reader{position:fixed; inset:0; z-index:60; background:var(--ink); overflow-y:auto;
-    opacity:0; visibility:hidden; transition:opacity .25s ease;}
-  .reader.open{opacity:1; visibility:visible;}
-  .reader-inner{max-width:760px; margin:0 auto; padding:30px 22px 80px;}
-  .reader-close{display:inline-flex; align-items:center; gap:7px; background:none; border:1px solid var(--line-2);
-    color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:.76rem; letter-spacing:.04em;
-    padding:9px 15px; border-radius:999px; cursor:pointer; margin:8px 0 28px; transition:.2s;}
-  .reader-close:hover{border-color:var(--gold); color:var(--gold);}
-  .reader .eyebrow{display:inline-block; margin-bottom:14px;}
-  .reader h1{font-family:"Fraunces",serif; font-weight:600; line-height:1.08; letter-spacing:-.015em;
-    font-size:clamp(1.9rem,4vw,2.9rem); margin:0 0 16px;}
-  .reader .byline{font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--faint);
-    letter-spacing:.03em; padding-bottom:22px; margin-bottom:26px; border-bottom:1px solid var(--line);}
-  .reader .byline b{color:var(--gold); font-weight:500;}
-  .article-body p{font-size:1.07rem; line-height:1.75; color:#D8D6CD; margin:0 0 20px;}
-  .article-body p:first-child{font-size:1.16rem; color:var(--paper);}
-  .r-source{display:inline-flex; align-items:center; gap:8px; margin-top:14px;
-    font-family:"IBM Plex Mono",monospace; font-size:.8rem; letter-spacing:.03em;
-    border:1px solid var(--gold-dim); color:var(--gold); padding:11px 18px; border-radius:999px; transition:.2s;}
-  .r-source:hover{background:var(--gold); color:#1a1407; border-color:var(--gold);}
-  .r-disc{margin-top:30px; padding-top:18px; border-top:1px solid var(--line);
-    font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--faint); line-height:1.5;}
+  /* login */
+  .login{max-width:380px; margin:9vh auto 0;}
+  .login .card{padding:30px;}
+  .center-note{text-align:center; color:var(--faint); font-size:.78rem; margin-top:18px;}
 
-  /* ---------- RESPONSIVE ---------- */
-  @media(max-width:920px){
-    .hero{grid-template-columns:1fr; gap:30px;}
-    .signals{grid-template-columns:repeat(2,1fr);}
-    .grid{grid-template-columns:repeat(2,1fr);}
-    .promo{grid-template-columns:1fr;}
-    .foot{grid-template-columns:1fr 1fr;}
-  }
-  @media(max-width:640px){
-    nav.main,.sub{display:none;}
-    .menu-btn{display:block;}
-    .grid{grid-template-columns:1fr;}
-    .signals{grid-template-columns:1fr 1fr;}
-    .foot{grid-template-columns:1fr;}
-    .lead h1{font-size:2rem;}
-  }
-  @media(prefers-reduced-motion:reduce){
-    /* ticker tetap bergerak (informasi harga); animasi lain dimatikan */
-    .card{opacity:1; transform:none;}
-    html{scroll-behavior:auto;}
+  .hide{display:none !important;}
+  @media(max-width:560px){
+    .row{grid-template-columns:1fr;}
+    .item{flex-wrap:wrap;}
+    .item .ops{width:100%;}
+    .item .ops .btn{flex:1;}
   }
 </style>
 </head>
 <body>
 
-<!-- ===== TICKER (signature: pasar tak pernah tidur) ===== -->
-<div class="ticker" aria-label="Harga pasar terkini">
-  <div class="ticker-track" id="ticker"></div>
-</div>
-
-<!-- ===== HEADER ===== -->
-<header class="site">
+<header>
   <div class="wrap bar">
-    <a class="brand" href="#" aria-label="DEFI CRYPTO MEDIA beranda">
-      <span class="blk" aria-hidden="true"></span>DEFI <span>·</span> CRYPTO MEDIA
-    </a>
-    <nav class="main" aria-label="Kategori utama">
-      <a href="#feed" data-jump="DeFi">DeFi</a>
-      <a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a>
-      <a href="#feed" data-jump="RWA">RWA</a>
-      <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
-      <a href="#feed" data-jump="Regulasi">Regulasi</a>
-      <a href="#feed" data-jump="Institutional">Institusional</a>
-      <a href="#feed" data-jump="Artikel">Artikel</a>
-    </nav>
-    <div class="bar-right">
-      <a class="sub" href="#langganan">Berlangganan</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Buka menu">☰</button>
+    <div class="brand"><span class="blk"></span>DEFI · CRYPTO MEDIA <small>Admin · v6</small></div>
+    <div class="who" id="who">
+      <span id="whoEmail"></span>
+      <button class="btn ghost hide" id="logoutBtn">Keluar</button>
     </div>
   </div>
-  <nav class="mnav" id="mobileMenu" aria-label="Menu seluler">
-    <a href="#feed" data-jump="Semua">Semua Berita</a>
-    <a href="#feed" data-jump="DeFi">DeFi</a>
-    <a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a>
-    <a href="#feed" data-jump="RWA">RWA</a>
-    <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
-    <a href="#feed" data-jump="Regulasi">Regulasi</a>
-    <a href="#feed" data-jump="Institutional">Institusional</a>
-    <a href="#feed" data-jump="Artikel">Artikel</a>
-    <a href="#langganan" class="msub">Berlangganan</a>
-  </nav>
 </header>
 
-<main class="wrap" id="top">
+<!-- ============ LOGIN ============ -->
+<section class="login" id="loginView">
+  <div class="card">
+    <span class="eyebrow">Masuk admin</span>
+    <h1 class="title" style="margin-top:8px; font-size:1.4rem;">Kelola artikel</h1>
+    <p class="sub" style="margin-bottom:20px;">Masuk untuk menambah & mengatur berita.</p>
+    <label for="email">Email</label>
+    <input type="email" id="email" autocomplete="username" placeholder="admin@email.com" />
+    <label for="password">Kata sandi</label>
+    <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" />
+    <div class="actions">
+      <button class="btn gold" id="loginBtn" style="width:100%;">Masuk</button>
+    </div>
+    <p class="status err" id="loginStatus" style="margin-top:14px;"></p>
+    <button class="btn" id="testBtn" style="width:100%; margin-top:6px;">Tes koneksi Supabase</button>
+    <button class="btn" id="testLoginBtn" style="width:100%; margin-top:6px;">Tes login langsung</button>
+    <p class="center-note">Lupa sandi? Atur ulang di dashboard Supabase &gt; Authentication.</p>
+  </div>
+</section>
 
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="lead" id="heroLead"><!-- diisi JS --></div>
-    <aside aria-label="Berita pilihan lain">
-      <div class="hero-art" aria-hidden="true">
-        <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <linearGradient id="g1" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="#E8B65C" stop-opacity=".0"/>
-              <stop offset="1" stop-color="#E8B65C" stop-opacity=".55"/>
-            </linearGradient>
-            <linearGradient id="g2" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0" stop-color="#46D6A8" stop-opacity="0"/>
-              <stop offset="1" stop-color="#46D6A8" stop-opacity=".4"/>
-            </linearGradient>
-          </defs>
-          <!-- grid halus = "blok on-chain" -->
-          <g stroke="rgba(255,255,255,.05)">
-            <line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="120" x2="400" y2="120"/>
-            <line x1="0" y1="180" x2="400" y2="180"/>
-            <line x1="100" y1="0" x2="100" y2="240"/><line x1="200" y1="0" x2="200" y2="240"/>
-            <line x1="300" y1="0" x2="300" y2="240"/>
-          </g>
-          <!-- candle/bar menanjak = aset nyata naik on-chain -->
-          <path d="M0,210 L60,180 L120,190 L180,140 L240,150 L300,90 L400,60" fill="none"
-                stroke="url(#g1)" stroke-width="2.5"/>
-          <g fill="url(#g2)">
-            <rect x="44" y="180" width="14" height="60"/><rect x="104" y="190" width="14" height="50"/>
-            <rect x="164" y="140" width="14" height="100"/><rect x="224" y="150" width="14" height="90"/>
-            <rect x="284" y="90" width="14" height="150"/><rect x="344" y="60" width="14" height="180"/>
-          </g>
-        </svg>
-        <div class="cap">RWA on-chain · 30 hari terakhir</div>
+<!-- ============ APP (setelah login) ============ -->
+<main class="wrap hide" id="appView">
+
+  <h1 class="title" id="formTitle">Tulis artikel baru</h1>
+  <p class="sub" id="formSub">Isi form, klik Terbitkan. Artikel langsung muncul di situs dalam &le; 3 menit.</p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label for="f-cat">Kategori</label>
+        <select id="f-cat">
+          <option value="DeFi">DeFi</option>
+          <option value="Tokenized Stocks">Tokenisasi Saham</option>
+          <option value="RWA">RWA</option>
+          <option value="Stablecoin">Stablecoin</option>
+          <option value="Regulasi">Regulasi</option>
+          <option value="Institutional">Institusional</option>
+          <option value="Artikel">Artikel (kanal editorial)</option>
+        </select>
       </div>
-      <div class="secondaries" id="heroSecs"><!-- diisi JS --></div>
-    </aside>
-  </section>
-
-  <!-- ===== MARKET SIGNALS ===== -->
-  <section class="signals" aria-label="Sinyal pasar">
-    <div class="sig"><div class="k">DeFi TVL</div><div class="v" id="sig-tvl">—</div><div class="c">semua chain · DeFiLlama</div></div>
-    <div class="sig"><div class="k">Kripto Mkt Cap</div><div class="v" id="sig-mcap">—</div><div class="c" id="sig-mcap-c">memuat…</div></div>
-    <div class="sig"><div class="k">BTC Dominance</div><div class="v" id="sig-btcd">—</div><div class="c">dari total market cap</div></div>
-    <div class="sig"><div class="k">Volume 24j</div><div class="v" id="sig-vol">—</div><div class="c">seluruh pasar kripto</div></div>
-  </section>
-
-  <!-- ===== FEED ===== -->
-  <section id="feed">
-    <div class="sect-head">
-      <h2>Terbaru</h2>
-      <div class="chips" id="chips" role="group" aria-label="Saring kategori"></div>
+      <div>
+        <label for="f-site">Situs</label>
+        <select id="f-site">
+          <option value="A">A — asetkeuangandigital.id</option>
+          <option value="B">B — domain kedua</option>
+        </select>
+      </div>
     </div>
-    <div class="grid" id="grid"></div>
-    <div class="more-row"><button class="more" id="moreBtn">Muat lebih banyak</button></div>
-  </section>
 
-  <!-- ===== NEWSLETTER / TELEGRAM ===== -->
-  <section class="promo" id="langganan">
-    <div>
-      <span class="eyebrow">Ikuti update harian</span>
-      <h2>Berita DeFi &amp; tokenisasi saham, langsung ke Anda.</h2>
-      <p>Ringkasan pilihan tiap hari: RWA, stablecoin, regulasi OJK, dan adopsi institusional. Gratis.</p>
-    </div>
-    <div>
-      <form class="act" id="subForm">
-        <input type="email" placeholder="email@anda.com" aria-label="Email Anda" required />
-        <button type="submit">Berlangganan</button>
-      </form>
-      <a class="tg-join" id="tgJoin" target="_blank" rel="noopener noreferrer">Atau gabung channel Telegram ↗</a>
-    </div>
-  </section>
+    <label for="f-title">Judul</label>
+    <input type="text" id="f-title" placeholder="Judul artikel" />
 
+    <label for="f-dek">Ringkasan singkat (dek)</label>
+    <textarea id="f-dek" rows="2" placeholder="Satu sampai dua kalimat yang tampil di kartu."></textarea>
+
+    <label for="f-body">Isi artikel</label>
+    <textarea id="f-body" rows="9" placeholder="Tulis isi artikel. Pisahkan antar-paragraf dengan satu baris kosong."></textarea>
+    <p class="hint">Antar-paragraf: beri satu baris kosong. Tutup dengan catatan "bukan nasihat keuangan" bila perlu.</p>
+
+    <div class="row">
+      <div>
+        <label for="f-source">Sumber</label>
+        <input type="text" id="f-source" placeholder="mis. Reuters, OJK" />
+      </div>
+      <div>
+        <label for="f-url">Link sumber asli</label>
+        <input type="url" id="f-url" placeholder="https://… (boleh kosong)" />
+      </div>
+    </div>
+
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="f-live" /> Tandai LIVE (breaking)</label>
+      <label class="check"><input type="checkbox" id="f-show" checked /> Tampilkan di website</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn gold" id="publishBtn">Terbitkan artikel</button>
+      <button class="btn" id="cancelEditBtn" style="display:none">Batal edit</button>
+      <button class="btn" id="clearBtn">Kosongkan</button>
+      <span class="status" id="formStatus"></span>
+    </div>
+  </div>
+
+  <div class="list-head">
+    <h2>Artikel terbaru</h2>
+    <button class="btn ghost" id="refreshBtn">Muat ulang</button>
+  </div>
+  <div id="list"><p class="hint">Memuat…</p></div>
+
+  <p class="center-note" style="margin:26px 0;"><a href="index.html" target="_blank">Lihat situs ↗</a></p>
 </main>
 
-<!-- ===== READER: halaman baca artikel ===== -->
-<div class="reader" id="reader" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Artikel">
-  <div class="reader-inner">
-    <button class="reader-close" id="readerClose">← Kembali ke daftar</button>
-    <span class="eyebrow" id="rCat"></span>
-    <h1 id="rTitle"></h1>
-    <p class="byline" id="rMeta"></p>
-    <div class="article-body" id="rBody"></div>
-    <a class="r-source" id="rSource" target="_blank" rel="noopener noreferrer">Baca sumber asli ↗</a>
-    <p class="r-disc">Artikel ini ringkasan editorial berbahasa Indonesia, disusun ulang dari sumber dan bukan nasihat keuangan. Untuk detail lengkap, buka tautan sumber asli di atas.</p>
-  </div>
-</div>
-
-<!-- ===== FOOTER ===== -->
-<footer class="site">
-  <div class="wrap">
-    <div class="foot">
-      <div>
-        <a class="brand" href="#"><span class="blk" aria-hidden="true"></span>DEFI <span>·</span> CRYPTO MEDIA</a>
-        <p>Media berita yang fokus pada DeFi, tokenisasi saham, real-world assets, stablecoin, dan adopsi kripto institusional — dengan konteks pasar Indonesia.</p>
-      </div>
-      <div>
-        <h4>Kanal</h4>
-        <ul>
-          <li><a href="#feed" data-jump="DeFi">DeFi</a></li>
-          <li><a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a></li>
-          <li><a href="#feed" data-jump="RWA">RWA</a></li>
-          <li><a href="#feed" data-jump="Stablecoin">Stablecoin</a></li>
-          <li><a href="#feed" data-jump="Regulasi">Regulasi</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Ikuti</h4>
-        <ul>
-          <li><a href="#">Telegram</a></li>
-          <li><a href="#">X / Twitter</a></li>
-          <li><a href="#">LinkedIn</a></li>
-          <li><a href="#">Instagram</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="disc">Konten di situs ini bersifat informatif dan edukatif, bukan nasihat keuangan, investasi, hukum, atau pajak. Aset kripto berisiko tinggi; lakukan riset mandiri sebelum mengambil keputusan.</p>
-    <div class="legal">
-      <span>© <span id="yr"></span> DEFI · CRYPTO MEDIA</span>
-      <span>Dibuat untuk pembaca DeFi &amp; tokenisasi saham Indonesia</span>
-    </div>
-  </div>
-</footer>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ============ KONFIGURASI — ISI 3 NILAI INI ============
-   - SUPA_URL  : Project URL Supabase (mis. https://xxxx.supabase.co)
-   - SUPA_ANON : anon/public key (BUKAN service_role!). Aman di web (tabel baca-saja).
-   - TELEGRAM_URL : link channel Telegram Anda (mis. https://t.me/namachannel).
-   Sebelum diisi, situs memakai berita contoh & tombol Telegram disembunyikan. */
-const SUPA_URL     = "https://mledqkynatqkqlrnrfmz.supabase.co";
-const SUPA_ANON    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
-// ==== PENANDA SITUS ====  Repo situs pertama: "A".  Untuk repo situs kedua, ubah jadi "B".
-const SITE = "A";
-const TELEGRAM_URL = "https://t.me/DeFiCryptoMedia";
+/* ====== KONFIGURASI — sama dengan index.html (anon key AMAN dipublikasikan) ====== */
+const SUPA_URL  = "https://mledqkynatqkqlrnrfmz.supabase.co";
+const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
 
-/* =================================================================
-   DATA BERITA — UNTUK MENAMBAH ARTIKEL, SALIN SATU BLOK { } DI BAWAH,
-   UBAH ISINYA, DAN TARUH DI URUTAN PALING ATAS (yang terbaru di atas).
-   featured:true  -> dipakai sebagai berita utama (Hero). Cukup 1 saja.
-   ================================================================= */
-let ARTICLES = [
-  { cat:"Tokenized Stocks", featured:true,
-    title:"Volume Tokenisasi Saham Global Tembus Rekor Bulanan",
-    dek:"Lonjakan minat investor institusional mendorong perdagangan saham tertokenisasi ke level tertinggi, membuka pertanyaan baru soal akses pasar 24/7 di Indonesia.",
-    src:"Reuters", time:"2 jam lalu", url:"#" },
+const sb = window.supabase.createClient(SUPA_URL, SUPA_ANON, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: false,
+    // bypass Web Locks (penyebab login menggantung saat ada banyak tab) :
+    lock: (name, acquireTimeout, fn) => fn(),
+  },
+});
+const $ = id => document.getElementById(id);
+const LABEL = {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"};
 
-  { cat:"RWA",
-    title:"Dana Treasury Tertokenisasi Lampaui US$5 Miliar On-Chain",
-    dek:"Produk surat utang negara berbasis blockchain terus menarik dana institusi, jadi tulang punggung narasi real-world assets.",
-    src:"The Block", time:"3 jam lalu", url:"#" },
-
-  { cat:"Regulasi",
-    title:"OJK Perluas Sandbox Aset Kripto: Apa Artinya bagi Tokenisasi",
-    dek:"Regulator membuka ruang uji coba lebih luas untuk produk tertokenisasi, sinyal penting bagi pelaku pasar lokal.",
-    src:"Bisnis.com", time:"5 jam lalu", url:"#" },
-
-  { cat:"Stablecoin",
-    title:"Stablecoin Rupiah Diuji untuk Penyelesaian Antarbank",
-    dek:"Proyek percontohan menyoroti potensi efisiensi pembayaran, sekaligus tantangan kepatuhan dan pengawasan.",
-    src:"CoinDesk", time:"6 jam lalu", url:"#" },
-
-  { cat:"DeFi", live:true,
-    title:"Protokol Lending DeFi Catat Lonjakan TVL Pasca Integrasi RWA",
-    dek:"Penambahan jaminan aset dunia nyata menarik likuiditas baru — sekaligus memunculkan diskusi soal profil risiko.",
-    src:"DeFiLlama", time:"8 jam lalu", url:"#" },
-
-  { cat:"Institutional",
-    title:"Manajer Aset Global Luncurkan Dana Tertokenisasi untuk Institusi",
-    dek:"Langkah pemain besar memperkuat tren adopsi produk keuangan on-chain di kalangan investor profesional.",
-    src:"Cointelegraph", time:"11 jam lalu", url:"#" },
-
-  { cat:"DeFi", live:true,
-    title:"Eksploitasi Jembatan Lintas-Rantai: Pelajaran Keamanan untuk Pengguna",
-    dek:"Insiden terbaru kembali menekankan pentingnya audit, manajemen kunci, dan kehati-hatian pengguna.",
-    src:"Decrypt", time:"14 jam lalu", url:"#" },
-
-  { cat:"Regulasi",
-    title:"Regulator Tekankan Aturan AML untuk Pasar Sekunder Stablecoin",
-    dek:"Fokus pengawasan bergeser ke aktivitas berisiko tinggi, bukan sekadar penerbitan stablecoin.",
-    src:"Reuters", time:"17 jam lalu", url:"#" },
-
-  { cat:"Tokenized Stocks",
-    title:"Saham Tertokenisasi 24/7: Peluang dan Risiko bagi Investor Ritel",
-    dek:"Akses pasar tanpa henti menjanjikan fleksibilitas, namun likuiditas dan perlindungan investor jadi sorotan.",
-    src:"The Block", time:"20 jam lalu", url:"#" },
-
-  { cat:"RWA",
-    title:"Standar Interoperabilitas Baru Perluas Jangkauan Aset Dunia Nyata",
-    dek:"Infrastruktur lintas-rantai dinilai jadi kunci agar RWA bisa berskala lintas jaringan.",
-    src:"CoinDesk", time:"22 jam lalu", url:"#" },
-
-  { cat:"Institutional",
-    title:"Adopsi Kustodian Kripto Institusional Meningkat di Asia Tenggara",
-    dek:"Permintaan penyimpanan aset yang aman tumbuh seiring masuknya pemain keuangan tradisional.",
-    src:"Nikkei Asia", time:"1 hari lalu", url:"#" },
-
-  { cat:"Regulasi",
-    title:"Otoritas Lintas Negara Mulai Selaraskan Aturan Sekuritas Tertokenisasi",
-    dek:"Harmonisasi pendekatan dinilai dapat mempercepat kepastian hukum bagi penerbit dan investor.",
-    src:"Financial Times", time:"1 hari lalu", url:"#" },
-];
-
-/* ----- ticker pasar: koin (id CoinGecko -> simbol). Harga ditarik LIVE. ----- */
-const COINS = [["bitcoin","BTC"],["ethereum","ETH"],["solana","SOL"],["binancecoin","BNB"],
-  ["ripple","XRP"],["avalanche-2","AVAX"],["chainlink","LINK"],["ondo-finance","ONDO"]];
-/* nilai awal (tampil dulu & jadi cadangan bila API gagal) */
-let TICK = [["BTC","$64,820","+1.8%",1],["ETH","$3,410","+2.3%",1],["SOL","$172.40","+4.1%",1],
-  ["BNB","$598.20","-0.6%",0],["XRP","$0.612","+0.9%",1],["AVAX","$38.05","-1.2%",0],
-  ["LINK","$18.74","+3.0%",1],["ONDO","$1.42","+6.7%",1]];
-
-/* ====================== RENDER ====================== */
-const $ = s => document.querySelector(s);
-
-// Ticker (digandakan agar gulir mulus) — bisa di-render ulang saat data live masuk
-function renderTicker(){
-  const make = ()=>TICK.map(([s,p,c,up])=>
-    `<span class="tk"><b>${s}</b>${p} <span class="${up?'up':'down'}">${c}</span><span class="dot"> ◆ </span></span>`).join("");
-  $("#ticker").innerHTML = make()+make();
-}
-renderTicker();
-
-// Gerakkan ticker via JavaScript (tetap jalan walau animasi CSS dimatikan HP).
-(function tickerMotion(){
-  const track = $("#ticker");
-  const wrap = track.parentElement;
-  let x = 0, paused = false;
-  if(wrap){
-    wrap.addEventListener("mouseenter", ()=>paused=true);
-    wrap.addEventListener("mouseleave", ()=>paused=false);
-    wrap.addEventListener("touchstart", ()=>paused=true, {passive:true});
-    wrap.addEventListener("touchend",   ()=>paused=false, {passive:true});
+/* ---------- AUTH ---------- */
+async function refreshAuthUI(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(session){
+    $("loginView").classList.add("hide");
+    $("appView").classList.remove("hide");
+    $("logoutBtn").classList.remove("hide");
+    $("whoEmail").textContent = session.user.email;
+    loadList();
+  }else{
+    $("loginView").classList.remove("hide");
+    $("appView").classList.add("hide");
+    $("logoutBtn").classList.add("hide");
+    $("whoEmail").textContent = "";
   }
-  function step(){
-    if(!paused){
-      x -= 0.6;                          // kecepatan gulir (px per frame)
-      const half = track.scrollWidth / 2;
-      if(half && -x >= half) x += half;  // ulang mulus (track digandakan 2x)
-      track.style.transform = "translateX(" + x + "px)";
-    }
-    requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-})();
-
-// Hero
-function renderHero(){
-  const news = ARTICLES.filter(a=>a.cat!=="Artikel");
-  const lead = news.find(a=>a.featured) || news[0];
-  if(!lead){ $("#heroLead").innerHTML=""; $("#heroSecs").innerHTML=""; return; }
-  $("#heroLead").innerHTML = `
-    <span class="eyebrow">${labelOf(lead.cat)}</span>
-    <h1><a href="#" data-open="${lead.id}">${lead.title}</a></h1>
-    <p class="dek">${lead.dek}</p>
-    <p class="byline">Sumber <b>${lead.src}</b> &nbsp;·&nbsp; ${lead.time}</p>`;
-  const secs = news.filter(a=>a!==lead).slice(0,3).map(a=>`
-    <div class="sec">
-      <div class="eyebrow"><b>${labelOf(a.cat)}</b></div>
-      <h3><a href="#" data-open="${a.id}">${a.title}</a></h3>
-      <div class="meta">${a.src} · ${a.time}</div>
-    </div>`).join("");
-  $("#heroSecs").innerHTML = secs;
 }
+sb.auth.onAuthStateChange(()=>refreshAuthUI());
 
-// Kategori + filter
-let activeCat = "Semua";
-let shown = 6;
-
-function labelOf(c){
-  return {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"}[c] || c;
-}
-function currentCats(){
-  const cats = [...new Set(ARTICLES.filter(a=>a.cat!=="Artikel").map(a=>a.cat))];
-  const list = ["Semua", ...cats];
-  if(ARTICLES.some(a=>a.cat==="Artikel")) list.push("Artikel");
-  return list;
-}
-
-function renderChips(){
-  $("#chips").innerHTML = currentCats().map(c=>
-    `<button class="chip ${c===activeCat?'on':''}" data-cat="${c}">${labelOf(c)}</button>`).join("");
-}
-
-function feedList(){
-  if(activeCat==="Artikel") return ARTICLES.filter(a=>a.cat==="Artikel");
-  const news = ARTICLES.filter(a=>a.cat!=="Artikel");
-  const lead = news.find(a=>a.featured) || news[0];
-  const pool = news.filter(a=>a!==lead);
-  return activeCat==="Semua" ? pool : pool.filter(a=>a.cat===activeCat);
-}
-
-function renderGrid(){
-  const list = feedList();
-  const slice = list.slice(0, shown);
-  const grid = $("#grid");
-  if(!slice.length){ grid.innerHTML = `<div class="empty">${activeCat==="Artikel"?"Belum ada artikel.":"Belum ada berita di kanal ini."}</div>`; }
-  else{
-    grid.innerHTML = slice.map(a=>`
-      <article class="card" data-open="${a.id}" tabindex="0" role="button" aria-label="Buka artikel">
-        <div class="top"><span class="tag ${a.live?'live':''}">${labelOf(a.cat)}</span></div>
-        <h3>${a.title}</h3>
-        <p class="dek">${a.dek}</p>
-        <div class="meta"><span class="src">${a.src}</span> · ${a.time}</div>
-      </article>`).join("");
-    requestAnimationFrame(()=>document.querySelectorAll(".card").forEach((c,i)=>{
-      setTimeout(()=>c.classList.add("show"), i*55);
-    }));
-  }
-  $("#moreBtn").style.display = list.length > shown ? "" : "none";
-}
-
-// Render ulang seluruh feed (dipakai saat data live masuk / ganti kategori)
-function rebuildFeed(){
-  ARTICLES.forEach((a,i)=>{ if(a.id==null) a.id="s"+i; });
-  renderHero(); renderChips(); renderGrid();
-}
-rebuildFeed();
-
-// Interaksi
-$("#chips").addEventListener("click", e=>{
-  const b = e.target.closest(".chip"); if(!b) return;
-  activeCat = b.dataset.cat; shown = 6; renderChips(); renderGrid();
-});
-$("#moreBtn").addEventListener("click", ()=>{ shown += 6; renderGrid(); });
-
-// Jump dari nav/footer -> filter kategori
-document.querySelectorAll("[data-jump]").forEach(a=>{
-  a.addEventListener("click", ()=>{
-    activeCat = a.dataset.jump; shown = 6; renderChips(); renderGrid();
-  });
-});
-
-// Menu mobile -> buka/tutup daftar menu
-const mobileMenu = $("#mobileMenu"), menuBtn = $("#menuBtn");
-function setMenu(open){
-  mobileMenu.classList.toggle("open", open);
-  menuBtn.textContent = open ? "✕" : "☰";
-  menuBtn.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
-}
-menuBtn.addEventListener("click", e=>{ e.stopPropagation(); setMenu(!mobileMenu.classList.contains("open")); });
-// Tutup menu setelah memilih item, atau saat klik di luar
-mobileMenu.querySelectorAll("a").forEach(a=> a.addEventListener("click", ()=> setMenu(false)));
-document.addEventListener("click", e=>{
-  if(mobileMenu.classList.contains("open") && !mobileMenu.contains(e.target) && e.target!==menuBtn) setMenu(false);
-});
-
-// Form langganan -> simpan email ke Supabase (tabel subscribers)
-$("#subForm").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const input = e.target.querySelector("input");
-  const btn = e.target.querySelector("button");
-  const email = (input.value || "").trim();
-  if(!email || !email.includes("@")){ input.focus(); return; }
-  const done = (txt, color)=>{ btn.textContent=txt; btn.style.background="var("+color+")";
-    setTimeout(()=>{ btn.textContent="Berlangganan"; btn.style.background="var(--gold)"; }, 2600); };
-  // Kalau Supabase belum dikonfigurasi -> mode demo (anggap sukses)
-  if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")){ input.value=""; done("Terkirim ✓","--up"); return; }
-  btn.textContent = "Mengirim...";
+$("loginBtn").addEventListener("click", async ()=>{
+  const email = $("email").value.trim(), password = $("password").value;
+  const st = $("loginStatus"); st.textContent = "";
+  if(!email || !password){ st.textContent = "Isi email dan kata sandi."; return; }
+  $("loginBtn").disabled = true; $("loginBtn").textContent = "Memproses…";
   try{
-    const r = await fetch(`${SUPA_URL}/rest/v1/subscribers`, {
-      method:"POST",
-      headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON,
-                "Content-Type":"application/json", Prefer:"return=minimal" },
-      body: JSON.stringify({ email })
-    });
-    if(r.ok || r.status===409){ input.value=""; done("Terkirim ✓","--up"); }  // 409 = sudah terdaftar
-    else done("Coba lagi","--down");
-  }catch(err){ done("Coba lagi","--down"); }
-});
-
-// Tombol Gabung Telegram (sembunyikan kalau link belum diisi)
-(function(){
-  const tg = document.getElementById("tgJoin");
-  if(TELEGRAM_URL && !TELEGRAM_URL.startsWith("ISI_")){ tg.href = TELEGRAM_URL; }
-  else { tg.style.display = "none"; }
-})();
-
-/* ============ DATA PASAR LIVE (gratis, tanpa API key) ============
-   Harga koin: CoinGecko. Sinyal pasar: CoinGecko global + DeFiLlama.
-   Update tiap menit. Kalau API gagal/lambat, angka cadangan tetap tampil. */
-const byId = id => document.getElementById(id);
-function fmtPrice(n){ return n>=1 ? "$"+n.toLocaleString("en-US",{maximumFractionDigits:2}) : "$"+n.toFixed(4); }
-function fmtChg(c){ return (c>=0?"+":"")+c.toFixed(1)+"%"; }
-function fmtBig(n){
-  if(n>=1e12) return "$"+(n/1e12).toFixed(2)+"T";
-  if(n>=1e9)  return "$"+(n/1e9).toFixed(1)+"B";
-  if(n>=1e6)  return "$"+(n/1e6).toFixed(1)+"M";
-  return "$"+Math.round(n).toLocaleString();
-}
-
-async function loadPrices(){
-  try{
-    const ids = COINS.map(c=>c[0]).join(",");
-    const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
-    if(!r.ok) return;
-    const d = await r.json();
-    TICK = COINS.map(([id,sym])=>{
-      const o = d[id]; if(!o) return [sym,"—","",1];
-      const chg = o.usd_24h_change || 0;
-      return [sym, fmtPrice(o.usd), fmtChg(chg), chg>=0?1:0];
-    });
-    renderTicker();
-  }catch(e){ /* biarkan nilai cadangan */ }
-}
-
-async function loadSignals(){
-  try{
-    const [gR,lR] = await Promise.all([
-      fetch("https://api.coingecko.com/api/v3/global"),
-      fetch("https://api.llama.fi/v2/chains")
+    const { error } = await Promise.race([
+      sb.auth.signInWithPassword({ email, password }),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error("Waktu habis (30 dtk). Coba pakai Chrome biasa (bukan browser dalam-aplikasi) & jaringan lain.")), 30000)),
     ]);
-    if(gR.ok){
-      const g = (await gR.json()).data;
-      byId("sig-mcap").textContent = fmtBig(g.total_market_cap.usd);
-      const mc = g.market_cap_change_percentage_24h_usd || 0;
-      const c = byId("sig-mcap-c");
-      c.textContent = (mc>=0?"▲ ":"▼ ")+Math.abs(mc).toFixed(1)+"% / 24j";
-      c.className = "c "+(mc>=0?"up":"down");
-      byId("sig-btcd").textContent = g.market_cap_percentage.btc.toFixed(1)+"%";
-      byId("sig-vol").textContent  = fmtBig(g.total_volume.usd);
-    }
-    if(lR.ok){
-      const chains = await lR.json();
-      byId("sig-tvl").textContent = fmtBig(chains.reduce((s,c)=>s+(c.tvl||0),0));
-    }
-  }catch(e){ /* biarkan tampilan apa adanya */ }
-}
-
-loadPrices(); loadSignals();
-setInterval(loadPrices, 60000);    // harga: tiap 1 menit
-setInterval(loadSignals, 120000);  // sinyal: tiap 2 menit
-
-/* ============ BERITA LIVE dari Supabase (anon key, BACA-SAJA) ============
-   Konfigurasi SUPA_URL / SUPA_ANON / TELEGRAM_URL ada di ATAS skrip. */
-
-function timeAgo(iso){
-  const s = (Date.now() - new Date(iso).getTime())/1000;
-  if(s < 60)    return "baru saja";
-  if(s < 3600)  return Math.floor(s/60)+" menit lalu";
-  if(s < 86400) return Math.floor(s/3600)+" jam lalu";
-  return Math.floor(s/86400)+" hari lalu";
-}
-
-async function loadNews(){
-  if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")) return; // belum dikonfigurasi
-  try{
-    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&show_on_web=eq.true&site=eq.${SITE}&order=created_at.desc&limit=40`,
-      { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
-    if(!r.ok) return;
-    const rows = await r.json();
-    if(!rows.length) return;
-    ARTICLES = rows.map((x,i)=>({
-      id: x.id,
-      cat: x.category || "DeFi",
-      title: x.title || "(tanpa judul)",
-      dek: x.dek || "",
-      body: x.body || "",
-      src: x.source || "—",
-      time: timeAgo(x.created_at),
-      url: x.url || "#",
-      featured: i===0,
-      live: (x.priority||"").toLowerCase()==="high",
-    }));
-    activeCat = "Semua"; shown = 6;
-    rebuildFeed();
-    if(firstNews){ firstNews=false; openFromHash(); }
-  }catch(e){ /* gagal -> tetap pakai berita contoh */ }
-}
-loadNews();
-setInterval(loadNews, 180000);   // segarkan berita tiap 3 menit
-
-/* ============ HALAMAN BACA ARTIKEL ============ */
-let firstNews = true;
-function escapeHtml(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
-// Escape dulu (aman dari HTML), lalu ubah *teks* / _teks_ menjadi italic
-function fmtInline(s){
-  return escapeHtml(s)
-    .replace(/\*([^*\n]+)\*/g, "<em>$1</em>")
-    .replace(/(^|[\s(])_([^_\n]+)_(?=[\s).,!?:;]|$)/g, "$1<em>$2</em>");
-}
-function findArticle(id){ return ARTICLES.find(a=>String(a.id)===String(id)); }
-
-function openReader(a){
-  if(!a) return;
-  byId("rCat").textContent = labelOf(a.cat);
-  byId("rTitle").textContent = a.title;
-  byId("rMeta").innerHTML = `Sumber <b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ${a.time}`;
-  const text = (a.body && a.body.trim()) ? a.body : (a.dek || "");
-  let paras = text.split(/\n+/).map(p=>p.trim()).filter(Boolean);
-  const norm = s => (s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
-  const titleN = norm(a.title);
-  while(paras.length){
-    const n = norm(paras[0]);
-    if(n && (n===titleN || n==="artikel lengkap" || n==="artikel" || n==="isi artikel" || n==="ringkasan" || n==="judul")) paras.shift();
-    else break;
+    if(error){ st.textContent = "Gagal masuk: " + error.message; }
+    else { $("password").value = ""; }
+  }catch(err){
+    st.textContent = ((err && err.message) ? err.message : String(err));
+  }finally{
+    $("loginBtn").disabled = false; $("loginBtn").textContent = "Masuk";
   }
-  byId("rBody").innerHTML = paras.map(p=>`<p>${fmtInline(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
-  const src = byId("rSource");
-  if(a.url && a.url!=="#"){ src.href=a.url; src.style.display=""; } else { src.style.display="none"; }
-  const r = byId("reader");
-  r.classList.add("open"); r.setAttribute("aria-hidden","false");
-  document.body.style.overflow="hidden"; r.scrollTop=0;
-  if(a.id!=null) history.replaceState(null,"",location.pathname+"#a"+a.id);
-}
-function closeReader(){
-  const r = byId("reader");
-  r.classList.remove("open"); r.setAttribute("aria-hidden","true");
-  document.body.style.overflow="";
-  history.replaceState(null,"",location.pathname);
-}
-function openFromHash(){
-  const m = location.hash.match(/^#a(.+)$/); if(!m) return;
-  openReader(findArticle(m[1]));
-}
-
-byId("readerClose").addEventListener("click", closeReader);
-document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeReader(); });
-
-// Klik kartu / judul -> buka artikel DI SITUS (bukan ke sumber asing)
-document.addEventListener("click", e=>{
-  const el = e.target.closest("[data-open]"); if(!el) return;
-  e.preventDefault(); openReader(findArticle(el.getAttribute("data-open")));
 });
-document.addEventListener("keydown", e=>{
-  if(e.key!=="Enter") return;
-  const el = e.target.closest("[data-open]"); if(!el) return;
-  e.preventDefault(); openReader(findArticle(el.getAttribute("data-open")));
-});
-openFromHash();
+$("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
 
-$("#yr").textContent = new Date().getFullYear();
+// Tes login lewat jalur mentah (tanpa library) untuk pinpoint masalah
+$("testLoginBtn").addEventListener("click", async ()=>{
+  const email = $("email").value.trim(), password = $("password").value;
+  const st = $("loginStatus"); st.className = "status"; st.textContent = "Tes login langsung…";
+  if(!email || !password){ st.className="status err"; st.textContent="Isi email & sandi dulu."; return; }
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 12000);
+    const r = await fetch(SUPA_URL + "/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: { apikey: SUPA_ANON, "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      signal: ctrl.signal,
+    });
+    clearTimeout(t);
+    let j = {}; try{ j = await r.json(); }catch(_){}
+    if(r.ok && j.access_token){
+      st.className = "status ok";
+      st.textContent = "LOGIN BERHASIL (raw) ✓ — kredensial benar. Masalah ada di library; saya bisa ganti metode login.";
+    }else{
+      st.className = "status err";
+      st.textContent = "HTTP " + r.status + ": " + (j.error_description || j.msg || j.error || "gagal");
+    }
+  }catch(e){
+    st.className = "status err";
+    st.textContent = "Gagal: " + (e.name==="AbortError" ? "timeout 12 dtk (POST /token terblokir?)" : e.message);
+  }
+});
+
+// Tes apakah server Auth Supabase hidup & merespons
+$("testBtn").addEventListener("click", async ()=>{
+  const st = $("loginStatus"); st.className = "status"; st.textContent = "Mengetes koneksi…";
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 10000);
+    const r = await fetch(SUPA_URL + "/auth/v1/health", { headers:{ apikey: SUPA_ANON }, signal: ctrl.signal });
+    clearTimeout(t);
+    st.className = r.ok ? "status ok" : "status err";
+    st.textContent = r.ok ? "Auth server hidup ✓ (HTTP 200) — masalah bukan di server." : ("Auth server menjawab HTTP " + r.status);
+  }catch(e){
+    st.className = "status err";
+    st.textContent = "Auth server TIDAK merespons (" + (e.name==="AbortError" ? "timeout 10s" : e.message) + ")";
+  }
+});
+$("logoutBtn").addEventListener("click", ()=> sb.auth.signOut());
+
+/* ---------- TERBITKAN / SIMPAN EDIT ---------- */
+let editingId = null;
+
+$("publishBtn").addEventListener("click", async ()=>{
+  const st = $("formStatus"); st.className = "status"; st.textContent = "";
+  const row = {
+    category: $("f-cat").value,
+    site:   $("f-site").value,
+    title:  $("f-title").value.trim(),
+    dek:    $("f-dek").value.trim(),
+    body:   $("f-body").value.trim(),
+    source: $("f-source").value.trim(),
+    url:    $("f-url").value.trim() || null,
+    priority: $("f-live").checked ? "high" : "normal",
+    show_on_web: $("f-show").checked,
+  };
+  if(!row.title){ st.className="status err"; st.textContent="Judul wajib diisi."; return; }
+  if(!row.dek && !row.body){ st.className="status err"; st.textContent="Isi ringkasan atau isi artikel."; return; }
+
+  $("publishBtn").disabled = true;
+  let error;
+  if(editingId){
+    $("publishBtn").textContent = "Menyimpan…";
+    ({ error } = await sb.from("published_news").update(row).eq("id", editingId));
+  }else{
+    $("publishBtn").textContent = "Menerbitkan…";
+    ({ error } = await sb.from("published_news").insert(row));
+  }
+  $("publishBtn").disabled = false;
+
+  if(error){
+    st.className="status err"; st.textContent = "Gagal: " + error.message;
+    $("publishBtn").textContent = editingId ? "Simpan perubahan" : "Terbitkan artikel";
+    return;
+  }
+  st.className="status ok";
+  st.textContent = editingId ? "Perubahan tersimpan ✓ — diperbarui di situs dalam ≤3 menit."
+                             : "Terbit ✓ — muncul di situs dalam ≤3 menit.";
+  clearForm(); loadList();
+});
+
+// muat data artikel ke form untuk diedit
+async function startEdit(id){
+  const { data, error } = await sb.from("published_news").select("*").eq("id", id).single();
+  if(error){ alert("Gagal memuat artikel: " + error.message); return; }
+  editingId = id;
+  setCat(data.category);
+  $("f-site").value   = (data.site === "B") ? "B" : "A";
+  $("f-title").value  = data.title || "";
+  $("f-dek").value    = data.dek || "";
+  $("f-body").value   = data.body || "";
+  $("f-source").value = data.source || "";
+  $("f-url").value    = (data.url && data.url!=="#") ? data.url : "";
+  $("f-live").checked = (data.priority||"").toLowerCase()==="high";
+  $("f-show").checked = !!data.show_on_web;
+  $("formTitle").textContent = "Edit artikel";
+  $("formSub").textContent   = "Ubah isi lalu klik Simpan perubahan.";
+  $("publishBtn").textContent = "Simpan perubahan";
+  $("cancelEditBtn").style.display = "";
+  $("formStatus").textContent = "";
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function setCat(c){
+  const sel = $("f-cat");
+  if(c && !Array.from(sel.options).some(o=>o.value===c)){
+    const o = document.createElement("option"); o.value = c; o.textContent = LABEL[c]||c; sel.appendChild(o);
+  }
+  sel.value = c || "DeFi";
+}
+
+function clearForm(){
+  editingId = null;
+  ["f-title","f-dek","f-body","f-source","f-url"].forEach(id=>$(id).value="");
+  $("f-live").checked = false; $("f-show").checked = true; $("f-cat").value = "DeFi"; $("f-site").value = "A";
+  $("formTitle").textContent = "Tulis artikel baru";
+  $("formSub").textContent   = "Isi form, klik Terbitkan. Artikel langsung muncul di situs dalam ≤3 menit.";
+  $("publishBtn").textContent = "Terbitkan artikel";
+  $("cancelEditBtn").style.display = "none";
+}
+$("clearBtn").addEventListener("click", ()=>{ clearForm(); $("formStatus").textContent=""; });
+$("cancelEditBtn").addEventListener("click", ()=>{ clearForm(); $("formStatus").textContent=""; });
+$("refreshBtn").addEventListener("click", loadList);
+
+/* ---------- DAFTAR + KELOLA ---------- */
+async function loadList(){
+  const box = $("list"); box.innerHTML = '<p class="hint">Memuat…</p>';
+  const { data, error } = await sb.from("published_news")
+    .select("id,category,title,show_on_web,priority,created_at,site")
+    .order("created_at",{ascending:false}).limit(30);
+  if(error){ box.innerHTML = '<p class="hint" style="color:var(--down)">Gagal memuat: '+error.message+'</p>'; return; }
+  if(!data.length){ box.innerHTML = '<p class="hint">Belum ada artikel.</p>'; return; }
+
+  box.innerHTML = data.map(a=>{
+    const cat = LABEL[a.category] || a.category;
+    const when = new Date(a.created_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+    const live = a.priority==="high" ? ' · LIVE' : '';
+    const siteTag = ' · Situs ' + ((a.site === "B") ? "B" : "A");
+    const pill = a.show_on_web ? '<span class="pill tayang">Tayang</span>' : '<span class="pill hidden">Disembunyikan</span>';
+    const toggle = a.show_on_web ? "Sembunyikan" : "Tampilkan";
+    return `<div class="item">
+      <div class="meta">
+        <div class="t">${esc(a.title)}</div>
+        <div class="m">${esc(cat)} · ${when}${live}${siteTag}</div>
+      </div>
+      ${pill}
+      <div class="ops">
+        <button class="btn ghost" data-edit="${a.id}">Edit</button>
+        <button class="btn ghost" data-toggle="${a.id}" data-cur="${a.show_on_web}">${toggle}</button>
+        <button class="btn ghost danger" data-del="${a.id}">Hapus</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+document.addEventListener("click", async e=>{
+  const ed  = e.target.closest("[data-edit]");
+  const tog = e.target.closest("[data-toggle]");
+  const del = e.target.closest("[data-del]");
+  if(ed){ startEdit(ed.getAttribute("data-edit")); return; }
+  if(tog){
+    const id = tog.getAttribute("data-toggle");
+    const cur = tog.getAttribute("data-cur")==="true";
+    tog.disabled = true;
+    const { error } = await sb.from("published_news").update({show_on_web: !cur}).eq("id", id);
+    if(error){ alert("Gagal: "+error.message); tog.disabled=false; } else loadList();
+  }
+  if(del){
+    const id = del.getAttribute("data-del");
+    if(!confirm("Hapus artikel ini? Tindakan ini permanen.")) return;
+    del.disabled = true;
+    const { error } = await sb.from("published_news").delete().eq("id", id);
+    if(error){ alert("Gagal: "+error.message); del.disabled=false; } else loadList();
+  }
+});
+
+function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+
+refreshAuthUI();
 </script>
 </body>
 </html>
