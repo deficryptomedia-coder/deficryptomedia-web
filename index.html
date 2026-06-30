@@ -359,7 +359,6 @@
         <input type="email" placeholder="email@anda.com" aria-label="Email Anda" required />
         <button type="submit">Berlangganan</button>
       </form>
-      <a class="tg-join" id="tgJoin" target="_blank" rel="noopener noreferrer">Atau gabung channel Telegram ↗</a>
     </div>
   </section>
 
@@ -640,10 +639,10 @@ document.addEventListener("click", e=>{
 // Email langsung ke tim (pelanggan bisa fast-response) - tetap simpan ke Supabase juga
 const SUB_EMAIL = "deficryptomedia@gmail.com";
 function openSubMail(em){
-  const a=document.createElement("a");
-  a.href="mailto:"+SUB_EMAIL+"?subject="+encodeURIComponent("Berlangganan DeFi Crypto Media")
-        +"&body="+encodeURIComponent("Halo, saya ingin berlangganan update harian.\nEmail saya: "+em);
-  a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove();
+  const su=encodeURIComponent("Berlangganan DeFi Crypto Media");
+  const body=encodeURIComponent("Halo, saya ingin berlangganan update harian. Email saya: "+em);
+  const gmail="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(SUB_EMAIL)+"&su="+su+"&body="+body;
+  window.open(gmail, "_blank", "noopener");
 }
 $("#subForm").addEventListener("submit", async e=>{
   e.preventDefault();
@@ -668,13 +667,6 @@ $("#subForm").addEventListener("submit", async e=>{
     else done("Coba lagi","--down");
   }catch(err){ done("Coba lagi","--down"); }
 });
-
-// Tombol Gabung Telegram (sembunyikan kalau link belum diisi)
-(function(){
-  const tg = document.getElementById("tgJoin");
-  if(TELEGRAM_URL && !TELEGRAM_URL.startsWith("ISI_")){ tg.href = TELEGRAM_URL; }
-  else { tg.style.display = "none"; }
-})();
 
 /* ============ DATA PASAR LIVE (gratis, tanpa API key) ============
    Harga koin: CoinGecko. Sinyal pasar: CoinGecko global + DeFiLlama.
