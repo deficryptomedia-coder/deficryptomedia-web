@@ -736,7 +736,7 @@ function timeAgo(iso){
 async function loadNews(){
   if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")) return; // belum dikonfigurasi
   try{
-    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&show_on_web=eq.true&site=eq.${SITE}&order=created_at.desc&limit=40`,
+    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&show_on_web=eq.true&site=eq.${SITE}&order=created_at.desc&limit=400`,
       { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
     if(!r.ok) return;
     const rows = await r.json();
