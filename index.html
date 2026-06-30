@@ -3,517 +3,833 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Family Office — Intelijen Pasar: Saham, Crypto &amp; Keuangan</title>
-<meta name="description" content="Portal intelijen pasar harian: saham, crypto, dan keuangan. Berita yang diringkas AI, harga live, dan analisis untuk Indonesia." />
+<title>DEFI · CRYPTO MEDIA — Berita DeFi, Tokenisasi Saham & RWA</title>
+<meta name="description" content="Media berita DeFi, tokenisasi saham, RWA, stablecoin, dan adopsi kripto institusional untuk Indonesia." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#0E1A2B;--ink-2:#15263C;--ink-3:#1C3050;
-    --ivory:#F4EFE4;--ivory-dim:#CFD6DF;
-    --gold:#C3A368;--gold-soft:#D8BE8E;--teal:#5FB0AC;
-    --up:#4ED49A;--down:#E8826B;--muted:#94A3B4;
-    --line:rgba(195,163,104,.24);--line2:rgba(148,163,180,.16);
-    --maxw:1240px;--ease:cubic-bezier(.22,.61,.36,1);
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --ink:#0D1019;          /* latar utama, ink kebiruan */
+    --ink-2:#141926;        /* kartu / panel */
+    --ink-3:#1B2230;        /* hover / raised */
+    --line:rgba(255,255,255,.09);
+    --line-2:rgba(255,255,255,.16);
+    --paper:#ECEAE1;        /* teks utama, off-white hangat */
+    --muted:#97A0B0;        /* teks sekunder */
+    --faint:#6B7486;        /* teks paling redup */
+    --gold:#E8B65C;         /* AKSEN BRAND tunggal (nilai/tokenisasi) */
+    --gold-dim:#9b7c3e;
+    --up:#46D6A8;           /* data naik (khusus pasar) */
+    --down:#F0775C;         /* data turun (khusus pasar) */
+    --maxw:1180px;
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--ink);color:var(--ivory);font-family:"Hanken Grotesk",system-ui,sans-serif;
-    font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.12;margin:0}
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
-  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
-  .up{color:var(--up)} .down{color:var(--down)}
-
-  /* TICKER */
-  .ticker{position:sticky;top:0;z-index:45;background:#0A1422;border-bottom:1px solid var(--line2);overflow:hidden;height:42px}
-  .ticker-track{display:flex;align-items:center;gap:30px;height:42px;white-space:nowrap;width:max-content;
-    animation:scroll 60s linear infinite;will-change:transform}
-  .ticker:hover .ticker-track{animation-play-state:paused}
-  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-25%)}}
-  .tk{display:inline-flex;align-items:center;gap:8px;font-size:.82rem}
-  .tk b{font-weight:600;letter-spacing:.02em;color:var(--ivory)}
-  .tk .p{font-family:var(--mono);color:var(--ivory-dim)}
-  .tk .c{font-family:var(--mono);font-size:.76rem}
-  @media (prefers-reduced-motion:reduce){.ticker-track{animation:none;overflow-x:auto}}
-
-  /* HEADER */
-  header.site{position:sticky;top:42px;z-index:40;background:rgba(14,26,43,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line2)}
-  .hbar{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:"Fraunces",serif;font-size:1.16rem;flex:0 0 auto}
-  .brand .mk{width:28px;height:28px}
-  nav.cats{display:flex;gap:22px;align-items:center;overflow:hidden}
-  nav.cats a{font-size:.9rem;color:var(--ivory-dim);transition:color .2s;cursor:pointer}
-  nav.cats a:hover{color:var(--gold-soft)}
-  .hcta{display:flex;gap:10px;align-items:center;flex:0 0 auto}
-  .btn{display:inline-flex;align-items:center;gap:.5em;font-weight:600;font-size:.86rem;padding:.6em 1.1em;border-radius:3px;
-    border:1px solid var(--gold);color:var(--gold);cursor:pointer;background:transparent;transition:background .25s,color .25s}
-  .btn:hover{background:var(--gold);color:var(--ink)}
-  .btn-solid{background:var(--gold);color:var(--ink)}
-  .btn-solid:hover{background:var(--gold-soft)}
-  .menu-btn{display:none;background:none;border:0;color:var(--ivory);cursor:pointer;padding:6px}
-
-  /* MARKET STATS */
-  .stats{border-bottom:1px solid var(--line2);background:#0C1727}
-  .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-  .st{padding:18px 22px;border-left:1px solid var(--line2)}
-  .st:first-child{border-left:0}
-  .st .k{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .st .v{font-family:var(--mono);font-size:1.32rem;color:var(--ivory);margin-top:6px}
-  .st .ch{font-family:var(--mono);font-size:.8rem;margin-top:2px}
-
-  /* INTRO */
-  .intro{padding:46px 0 8px}
-  .intro .eyebrow{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
-  .intro h1{font-size:clamp(2rem,1.4rem + 2.6vw,3.2rem);margin:14px 0 0;max-width:18ch}
-  .intro p{color:var(--muted);margin:16px 0 0;max-width:60ch}
-  /* HERO: panel Artikel Terbaru di kanan */
-  .intro-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
-  .intro-left{min-width:0}
-  .intro-latest{border:1px solid var(--line);border-radius:12px;padding:18px 20px 10px;
-    background:linear-gradient(160deg,rgba(21,38,60,.6),rgba(14,26,43,.25))}
-  .il-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
-  .il-head .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
-  .il-list{display:flex;flex-direction:column}
-  .il-item{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;font:inherit;color:inherit;
-    padding:13px 0;border-top:1px solid var(--line2);transition:opacity .2s}
-  .il-item:first-child{border-top:0}
-  .il-item:hover{opacity:.74}
-  .il-item .d{font-size:.72rem;color:var(--muted);letter-spacing:.03em}
-  .il-item h4{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:1.04rem;line-height:1.25;margin:4px 0 0;color:var(--ivory)}
-  .il-item .tg{display:inline-block;margin-top:8px}
-  .il-all{display:inline-block;font-size:.78rem;color:var(--gold);padding:12px 0 4px;cursor:pointer}
-  .il-all:hover{color:var(--gold-soft)}
-  .il-date{font-size:.7rem;color:var(--muted);font-family:var(--mono);white-space:nowrap}
-  .bf-item{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--line2);align-items:flex-start}
-  .bf-item:first-child{border-top:0}
-  .bf-dot{flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:9px}
-  .bf-tx{font-size:.92rem;color:var(--ivory-dim);line-height:1.5}
-  .bf-tx em{color:var(--gold-soft);font-style:italic}
-  @media (max-width:1000px){
-    .intro-grid{grid-template-columns:1fr;gap:30px}
-    .intro-latest{margin-top:6px}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--ink); color:var(--paper);
+    font-family:"Inter",system-ui,sans-serif; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(900px 500px at 85% -5%, rgba(232,182,92,.08), transparent 60%),
+      radial-gradient(700px 500px at 0% 0%, rgba(70,214,168,.05), transparent 55%);
+  }
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--gold); color:#1a1407;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px;}
+  .mono{font-family:"IBM Plex Mono",monospace;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--gold); font-weight:500;
   }
 
-  /* CHIPS */
-  .chips{display:flex;gap:10px;flex-wrap:wrap;padding:30px 0 26px}
-  .chip{font-size:.84rem;padding:.5em 1.05em;border:1px solid var(--line);border-radius:999px;color:var(--ivory-dim);
-    background:transparent;cursor:pointer;transition:all .25s}
-  .chip:hover{border-color:var(--gold);color:var(--ivory)}
-  .chip.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
-
-  /* FEED */
-  .sec-title{display:flex;align-items:baseline;gap:14px;margin:8px 0 22px}
-  .sec-title h2{font-size:1.7rem}
-  .sec-title span{font-size:.8rem;color:var(--muted)}
-  .feed{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:10px}
-  .card{display:flex;flex-direction:column;gap:11px;text-align:left;border:1px solid var(--line2);border-radius:8px;
-    background:rgba(21,38,60,.4);padding:22px 20px;cursor:pointer;color:inherit;font:inherit;
-    transition:transform .3s var(--ease),border-color .3s,background .3s}
-  .card:hover{transform:translateY(-4px);border-color:var(--gold);background:rgba(21,38,60,.72)}
-  .card.feat{grid-column:span 3;flex-direction:row;gap:28px;align-items:center;padding:30px 28px}
-  .card.feat .ftxt{flex:1}
-  .card.feat .fbadge{flex:0 0 auto;width:150px;height:150px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,rgba(195,163,104,.18),rgba(95,176,172,.14));border:1px solid var(--line)}
-  .card .d{font-size:.74rem;color:var(--muted);letter-spacing:.03em}
-  .card h3{font-size:1.22rem}
-  .card.feat h3{font-size:clamp(1.5rem,1.1rem + 1.4vw,2.1rem)}
-  .card p{margin:0;color:var(--muted);font-size:.92rem}
-  .card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
-  .tg{font-size:.66rem;color:var(--teal);border:1px solid rgba(95,176,172,.4);border-radius:3px;padding:1px 8px;letter-spacing:.03em}
-  .more-row{display:flex;justify-content:center;padding:36px 0 8px}
-  .empty{padding:50px 0;color:var(--muted);text-align:center;border:1px dashed var(--line2);border-radius:10px}
-
-  /* SUBSCRIBE */
-  .sub{margin:70px 0 0;border-top:1px solid var(--line2);background:linear-gradient(180deg,#0C1727,var(--ink))}
-  .sub .wrap{padding:64px 22px;text-align:center}
-  .sub h2{font-size:clamp(1.7rem,1.2rem + 1.8vw,2.6rem)}
-  .sub p{color:var(--muted);max-width:54ch;margin:16px auto 0}
-  .sub .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-  .sub input{background:rgba(21,38,60,.6);border:1px solid var(--line);border-radius:4px;color:var(--ivory);
-    padding:.8em 1.1em;font-family:inherit;min-width:260px}
-  .sub input:focus{outline:none;border-color:var(--gold)}
-
-  /* FOOTER */
-  footer{border-top:1px solid var(--line2);padding:50px 0 40px;color:var(--muted);margin-top:0}
-  .foot-grid{display:flex;justify-content:space-between;gap:36px;flex-wrap:wrap}
-  .foot-grid h4{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-family:"Hanken Grotesk",sans-serif;font-weight:600}
-  .foot-grid a,.foot-grid span{display:block;font-size:.9rem;color:var(--ivory-dim);margin-bottom:8px}
-  .foot-grid a:hover{color:var(--gold-soft)}
-  .disclaimer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;max-width:96ch;line-height:1.7}
-
-  /* MODAL */
-  .modal{position:fixed;inset:0;z-index:80;background:rgba(6,12,20,.78);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:38px 16px;overflow:auto}
-  .modal[hidden]{display:none}
-  .modal-in{position:relative;max-width:780px;width:100%;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:48px clamp(22px,4vw,56px);margin:auto}
-  #mClose{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ivory);cursor:pointer;font-size:1.2rem}
-  #mClose:hover{border-color:var(--gold);color:var(--gold)}
-  .art h1{font-size:clamp(1.7rem,1.2rem + 1.6vw,2.5rem);margin-bottom:10px}
-  .art .meta{color:var(--muted);font-size:.82rem;margin-bottom:8px}
-  .art .back{font-size:.84rem;color:var(--gold);cursor:pointer;display:inline-block;margin-bottom:18px}
-  .art h3{font-family:"Fraunces",serif;font-size:1.3rem;margin:24px 0 8px;color:var(--ivory)}
-  .art p{color:var(--ivory-dim);margin:0 0 14px}
-  .art ul{color:var(--ivory-dim);padding-left:20px;margin:0 0 14px}
-  .art .src{margin-top:22px}
-  .art .src a{color:var(--teal);font-size:.9rem}
-  .art .disc{margin-top:22px;padding-top:16px;border-top:1px solid var(--line2);font-size:.78rem;color:#70808f;line-height:1.7}
-
-  @media (max-width:1000px){
-    nav.cats{display:none}.menu-btn{display:block}
-    .stats .wrap{grid-template-columns:1fr 1fr}.st:nth-child(3){border-left:0}
-    .feed{grid-template-columns:1fr 1fr}.card.feat{grid-column:span 2}
+  /* ---------- TICKER ---------- */
+  .ticker{
+    border-bottom:1px solid var(--line); background:rgba(0,0,0,.25);
+    overflow:hidden; white-space:nowrap;
   }
-  @media (max-width:620px){
-    .feed{grid-template-columns:1fr}.card.feat{grid-column:span 1;flex-direction:column;align-items:flex-start}
-    .card.feat .fbadge{width:100%;height:110px}
-    .stats .wrap{grid-template-columns:1fr 1fr}
+  .ticker-track{
+    display:inline-flex; gap:34px; padding:9px 0; align-items:center;
+    will-change:transform;
   }
-  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+  .ticker:hover .ticker-track{animation-play-state:paused;}
+  @keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  .tk{font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.02em; color:var(--muted);}
+  .tk b{color:var(--paper); font-weight:600; margin-right:7px;}
+  .tk .up{color:var(--up);} .tk .down{color:var(--down);}
+  .tk .dot{color:var(--faint); margin:0 2px;}
+
+  /* ---------- HEADER ---------- */
+  header.site{position:sticky; top:0; z-index:30; background:rgba(13,16,25,.82);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--line);}
+  .bar{display:flex; align-items:center; justify-content:space-between; height:66px;}
+  .brand{display:flex; align-items:center; gap:11px; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1.18rem; letter-spacing:.01em;}
+  .brand .blk{width:13px; height:13px; background:var(--gold); border-radius:3px;
+    box-shadow:0 0 0 3px rgba(232,182,92,.18); transform:rotate(45deg);}
+  .brand span{color:var(--muted); font-weight:400;}
+  nav.main{display:flex; gap:26px;}
+  nav.main a{font-size:.83rem; color:var(--muted); font-weight:500; padding:4px 0; position:relative;}
+  nav.main a:hover{color:var(--paper);}
+  nav.main a::after{content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px;
+    background:var(--gold); transform:scaleX(0); transition:transform .22s ease; transform-origin:left;}
+  nav.main a:hover::after{transform:scaleX(1);}
+  .bar-right{display:flex; align-items:center; gap:20px;}
+  .nav-artikel{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--muted); font-weight:500; padding:8px 4px; white-space:nowrap; transition:color .2s; position:relative;}
+  .nav-artikel:hover{color:var(--paper);}
+  .nav-artikel::after{content:""; position:absolute; left:4px; right:4px; bottom:2px; height:2px;
+    background:var(--gold); transform:scaleX(0); transition:transform .22s ease; transform-origin:left;}
+  .nav-artikel:hover::after{transform:scaleX(1);}
+  .sub{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
+    border:1px solid var(--line-2); color:var(--paper); padding:8px 14px; border-radius:999px;
+    transition:.2s; white-space:nowrap;}
+  .sub:hover{background:var(--gold); color:#1a1407; border-color:var(--gold);}
+  .menu-btn{display:none; background:none; border:1px solid var(--line-2); color:var(--paper);
+    border-radius:8px; padding:7px 10px; cursor:pointer; font-size:1.05rem; line-height:1;}
+
+  /* ---------- MENU MOBILE ---------- */
+  .mnav{display:none; border-top:1px solid var(--line); background:var(--ink-2);}
+  .mnav.open{display:block;}
+  .mnav a{display:block; padding:14px 22px; color:var(--paper); font-size:1rem;
+    border-bottom:1px solid var(--line); font-weight:500; transition:background .15s;}
+  .mnav a:last-child{border-bottom:none;}
+  .mnav a:active{background:var(--ink-3);}
+  .mnav a.msub{color:var(--gold); font-family:"IBM Plex Mono",monospace; font-size:.82rem;
+    letter-spacing:.05em; text-transform:uppercase;}
+  @media(min-width:641px){ .mnav{display:none !important;} }
+
+  /* ---------- HERO ---------- */
+  .hero{display:grid; grid-template-columns:1.55fr 1fr; gap:42px; padding:54px 0 46px;
+    border-bottom:1px solid var(--line);}
+  .lead .eyebrow{margin-bottom:14px; display:inline-block;}
+  .lead h1{font-family:"Fraunces",serif; font-weight:600; line-height:1.04; letter-spacing:-.015em;
+    font-size:clamp(2.1rem,4.6vw,3.6rem); margin:0 0 18px;}
+  .lead h1 a:hover{color:var(--gold);}
+  .lead .dek{font-size:1.06rem; color:var(--muted); max-width:46ch; margin:0 0 20px;}
+  .byline{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--faint); letter-spacing:.03em;}
+  .byline b{color:var(--gold); font-weight:500;}
+  .hero-art{border:1px solid var(--line); border-radius:14px; background:
+      linear-gradient(160deg,#11161f,#0c1017); overflow:hidden; min-height:230px; position:relative;
+      display:flex; align-items:flex-end;}
+  .hero-art svg{position:absolute; inset:0; width:100%; height:100%;}
+  .hero-art .cap{position:relative; padding:16px 18px; font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem; color:var(--muted); letter-spacing:.04em;}
+  .secondaries{display:flex; flex-direction:column; gap:0;}
+  .sec{padding:16px 0; border-top:1px solid var(--line);}
+  .sec:first-child{border-top:none; padding-top:0;}
+  .sec .eyebrow{font-size:.66rem; color:var(--muted);}
+  .sec .eyebrow b{color:var(--gold); font-weight:500;}
+  .sec h3{font-family:"Fraunces",serif; font-weight:500; font-size:1.16rem; line-height:1.2; margin:7px 0 0;}
+  .sec h3 a:hover{color:var(--gold);}
+  .sec .meta{font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--faint); margin-top:7px;}
+
+  /* ---------- MARKET SIGNALS ---------- */
+  .signals{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:36px 0;}
+  .sig{background:var(--ink-2); padding:18px 20px;}
+  .sig .k{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
+  .sig .v{font-family:"Fraunces",serif; font-size:1.7rem; font-weight:600; margin-top:6px;}
+  .sig .c{font-family:"IBM Plex Mono",monospace; font-size:.74rem; margin-top:2px; color:var(--faint);}
+  .sig .c.up{color:var(--up);} .sig .c.down{color:var(--down);}
+
+  /* ---------- SECTION HEAD + FILTER ---------- */
+  .sect-head{display:flex; align-items:center; justify-content:space-between; gap:16px;
+    margin:8px 0 22px; padding-bottom:14px; border-bottom:1px solid var(--line); flex-wrap:wrap;}
+  .sect-head h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.5rem; margin:0; letter-spacing:-.01em;}
+  .chips{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.04em; color:var(--muted);
+    border:1px solid var(--line-2); background:transparent; padding:6px 13px; border-radius:999px; cursor:pointer;
+    transition:.18s;}
+  .chip:hover{color:var(--paper); border-color:var(--gold-dim);}
+  .chip.on{background:var(--gold); color:#1a1407; border-color:var(--gold); font-weight:500;}
+
+  /* ---------- GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+  .card{background:var(--ink-2); padding:22px 22px 24px; display:flex; flex-direction:column; gap:11px;
+    min-height:190px; transition:background .2s; opacity:0; transform:translateY(14px); cursor:pointer;}
+  .card.show{opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease, background .2s;}
+  .card:hover{background:var(--ink-3);}
+  .card .top{display:flex; align-items:center; gap:9px;}
+  .tag{font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--gold); border:1px solid var(--gold-dim); border-radius:4px; padding:2px 7px;}
+  .tag.live{color:var(--down); border-color:rgba(240,119,92,.4);}
+  .card h3{font-family:"Fraunces",serif; font-weight:500; font-size:1.18rem; line-height:1.22; margin:0;}
+  .card:hover h3{color:var(--gold);}
+  .card .dek{font-size:.9rem; color:var(--muted); margin:0; flex:1;}
+  .card .meta{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--faint); letter-spacing:.02em;
+    display:flex; gap:8px; align-items:center;}
+  .card .meta .src{color:var(--muted);}
+  .empty{grid-column:1/-1; background:var(--ink-2); padding:40px; text-align:center; color:var(--muted);
+    font-family:"IBM Plex Mono",monospace; font-size:.85rem;}
+
+  .more-row{display:flex; justify-content:center; margin:30px 0 4px;}
+  .more{font-family:"IBM Plex Mono",monospace; font-size:.76rem; letter-spacing:.06em; text-transform:uppercase;
+    border:1px solid var(--line-2); padding:11px 22px; border-radius:999px; color:var(--paper); cursor:pointer;
+    background:transparent; transition:.2s;}
+  .more:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* ---------- NEWSLETTER STRIP ---------- */
+  .promo{margin:54px 0; border:1px solid var(--line); border-radius:16px; padding:36px;
+    background:linear-gradient(135deg,#151a26,#0f131c);
+    display:grid; grid-template-columns:1.4fr 1fr; gap:30px; align-items:center;}
+  .promo h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.7rem; margin:6px 0 8px; line-height:1.15;}
+  .promo p{color:var(--muted); margin:0; font-size:.96rem;}
+  .promo .act{display:flex; gap:10px;}
+  .promo input{flex:1; background:#0b0e15; border:1px solid var(--line-2); color:var(--paper);
+    padding:13px 15px; border-radius:10px; font-family:"IBM Plex Mono",monospace; font-size:.82rem;}
+  .promo input:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  .promo button{background:var(--gold); color:#1a1407; border:none; padding:13px 20px; border-radius:10px;
+    font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.78rem; letter-spacing:.04em;
+    text-transform:uppercase; cursor:pointer; white-space:nowrap;}
+  .promo button:hover{filter:brightness(1.07);}
+  .tg-join{display:inline-block; margin-top:13px; font-family:"IBM Plex Mono",monospace;
+    font-size:.78rem; letter-spacing:.03em; color:var(--gold);}
+  .tg-join:hover{text-decoration:underline;}
+
+  /* ---------- FOOTER ---------- */
+  footer.site{border-top:1px solid var(--line); margin-top:30px; padding:46px 0 60px;}
+  .foot{display:grid; grid-template-columns:2fr 1fr 1fr; gap:30px;}
+  .foot .brand{margin-bottom:12px;}
+  .foot p{color:var(--muted); font-size:.9rem; max-width:42ch; margin:0 0 14px;}
+  .foot h4{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 14px;}
+  .foot ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px;}
+  .foot ul a{font-size:.88rem; color:var(--muted);} .foot ul a:hover{color:var(--gold);}
+  .legal{margin-top:34px; padding-top:20px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--faint); letter-spacing:.02em;}
+  .disc{color:var(--faint); max-width:62ch; font-size:.74rem; margin-top:10px; line-height:1.5;}
+
+  /* ---------- READER (halaman baca artikel) ---------- */
+  .reader{position:fixed; inset:0; z-index:60; background:var(--ink); overflow-y:auto;
+    opacity:0; visibility:hidden; transition:opacity .25s ease;}
+  .reader.open{opacity:1; visibility:visible;}
+  .reader-inner{max-width:760px; margin:0 auto; padding:30px 22px 80px;}
+  .reader-close{display:inline-flex; align-items:center; gap:7px; background:none; border:1px solid var(--line-2);
+    color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:.76rem; letter-spacing:.04em;
+    padding:9px 15px; border-radius:999px; cursor:pointer; margin:8px 0 28px; transition:.2s;}
+  .reader-close:hover{border-color:var(--gold); color:var(--gold);}
+  .reader .eyebrow{display:inline-block; margin-bottom:14px;}
+  .reader h1{font-family:"Fraunces",serif; font-weight:600; line-height:1.08; letter-spacing:-.015em;
+    font-size:clamp(1.9rem,4vw,2.9rem); margin:0 0 16px;}
+  .reader .byline{font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--faint);
+    letter-spacing:.03em; padding-bottom:22px; margin-bottom:26px; border-bottom:1px solid var(--line);}
+  .reader .byline b{color:var(--gold); font-weight:500;}
+  .article-body p{font-size:1.07rem; line-height:1.75; color:#D8D6CD; margin:0 0 20px;}
+  .article-body p:first-child{font-size:1.16rem; color:var(--paper);}
+  .r-source{display:inline-flex; align-items:center; gap:8px; margin-top:14px;
+    font-family:"IBM Plex Mono",monospace; font-size:.8rem; letter-spacing:.03em;
+    border:1px solid var(--gold-dim); color:var(--gold); padding:11px 18px; border-radius:999px; transition:.2s;}
+  .r-source:hover{background:var(--gold); color:#1a1407; border-color:var(--gold);}
+  .r-disc{margin-top:30px; padding-top:18px; border-top:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--faint); line-height:1.5;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:920px){
+    .hero{grid-template-columns:1fr; gap:30px;}
+    .signals{grid-template-columns:repeat(2,1fr);}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .promo{grid-template-columns:1fr;}
+    .foot{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:640px){
+    nav.main,.sub{display:none;}
+    .menu-btn{display:block;}
+    .grid{grid-template-columns:1fr;}
+    .signals{grid-template-columns:1fr 1fr;}
+    .foot{grid-template-columns:1fr;}
+    .lead h1{font-size:2rem;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    /* ticker tetap bergerak (informasi harga); animasi lain dimatikan */
+    .card{opacity:1; transform:none;}
+    html{scroll-behavior:auto;}
+  }
 </style>
 </head>
 <body>
 
-<!-- TICKER -->
-<div class="ticker" aria-label="Harga crypto langsung"><div class="ticker-track" id="ticker"></div></div>
+<!-- ===== TICKER (signature: pasar tak pernah tidur) ===== -->
+<div class="ticker" aria-label="Harga pasar terkini">
+  <div class="ticker-track" id="ticker"></div>
+</div>
 
-<!-- HEADER -->
+<!-- ===== HEADER ===== -->
 <header class="site">
-  <div class="wrap hbar">
-    <a class="brand" href="#top">
-      <svg class="mk" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="18.5" stroke="#C3A368"/><path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/><circle cx="20" cy="7" r="2.2" fill="#5FB0AC"/></svg>
-      <span>Family&nbsp;Office</span>
+  <div class="wrap bar">
+    <a class="brand" href="#" aria-label="DEFI CRYPTO MEDIA beranda">
+      <span class="blk" aria-hidden="true"></span>DEFI <span>·</span> CRYPTO MEDIA
     </a>
-    <nav class="cats" id="cats"></nav>
-    <div class="hcta">
-      <a class="btn" href="#langganan">Berlangganan</a>
-      <a class="btn-solid btn" href="#" id="tgLink">Telegram ↗</a>
+    <nav class="main" aria-label="Kategori utama">
+      <a href="#feed" data-jump="DeFi">DeFi</a>
+      <a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a>
+      <a href="#feed" data-jump="RWA">RWA</a>
+      <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
+      <a href="#feed" data-jump="Regulasi">Regulasi</a>
+      <a href="#feed" data-jump="Institutional">Institusional</a>
+      <a href="#feed" data-jump="Artikel">Artikel</a>
+    </nav>
+    <div class="bar-right">
+      <a class="sub" href="#langganan">Berlangganan</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Buka menu">☰</button>
     </div>
-    <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
+  <nav class="mnav" id="mobileMenu" aria-label="Menu seluler">
+    <a href="#feed" data-jump="Semua">Semua Berita</a>
+    <a href="#feed" data-jump="DeFi">DeFi</a>
+    <a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a>
+    <a href="#feed" data-jump="RWA">RWA</a>
+    <a href="#feed" data-jump="Stablecoin">Stablecoin</a>
+    <a href="#feed" data-jump="Regulasi">Regulasi</a>
+    <a href="#feed" data-jump="Institutional">Institusional</a>
+    <a href="#feed" data-jump="Artikel">Artikel</a>
+    <a href="#langganan" class="msub">Berlangganan</a>
+  </nav>
 </header>
 
-<!-- MARKET STATS -->
-<div class="stats" id="top">
-  <div class="wrap">
-    <div class="st"><div class="k">Kripto Market Cap</div><div class="v num" id="mc">—</div><div class="ch num" id="mcc">memuat…</div></div>
-    <div class="st"><div class="k">BTC Dominance</div><div class="v num" id="dom">—</div><div class="ch num">dari total market cap</div></div>
-    <div class="st"><div class="k">Volume 24 Jam</div><div class="v num" id="vol">—</div><div class="ch num">seluruh pasar kripto</div></div>
+<main class="wrap" id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="lead" id="heroLead"><!-- diisi JS --></div>
+    <aside aria-label="Berita pilihan lain">
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#E8B65C" stop-opacity=".0"/>
+              <stop offset="1" stop-color="#E8B65C" stop-opacity=".55"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#46D6A8" stop-opacity="0"/>
+              <stop offset="1" stop-color="#46D6A8" stop-opacity=".4"/>
+            </linearGradient>
+          </defs>
+          <!-- grid halus = "blok on-chain" -->
+          <g stroke="rgba(255,255,255,.05)">
+            <line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="120" x2="400" y2="120"/>
+            <line x1="0" y1="180" x2="400" y2="180"/>
+            <line x1="100" y1="0" x2="100" y2="240"/><line x1="200" y1="0" x2="200" y2="240"/>
+            <line x1="300" y1="0" x2="300" y2="240"/>
+          </g>
+          <!-- candle/bar menanjak = aset nyata naik on-chain -->
+          <path d="M0,210 L60,180 L120,190 L180,140 L240,150 L300,90 L400,60" fill="none"
+                stroke="url(#g1)" stroke-width="2.5"/>
+          <g fill="url(#g2)">
+            <rect x="44" y="180" width="14" height="60"/><rect x="104" y="190" width="14" height="50"/>
+            <rect x="164" y="140" width="14" height="100"/><rect x="224" y="150" width="14" height="90"/>
+            <rect x="284" y="90" width="14" height="150"/><rect x="344" y="60" width="14" height="180"/>
+          </g>
+        </svg>
+        <div class="cap">RWA on-chain · 30 hari terakhir</div>
+      </div>
+      <div class="secondaries" id="heroSecs"><!-- diisi JS --></div>
+    </aside>
+  </section>
+
+  <!-- ===== MARKET SIGNALS ===== -->
+  <section class="signals" aria-label="Sinyal pasar">
+    <div class="sig"><div class="k">DeFi TVL</div><div class="v" id="sig-tvl">—</div><div class="c">semua chain · DeFiLlama</div></div>
+    <div class="sig"><div class="k">Kripto Mkt Cap</div><div class="v" id="sig-mcap">—</div><div class="c" id="sig-mcap-c">memuat…</div></div>
+    <div class="sig"><div class="k">BTC Dominance</div><div class="v" id="sig-btcd">—</div><div class="c">dari total market cap</div></div>
+    <div class="sig"><div class="k">Volume 24j</div><div class="v" id="sig-vol">—</div><div class="c">seluruh pasar kripto</div></div>
+  </section>
+
+  <!-- ===== FEED ===== -->
+  <section id="feed">
+    <div class="sect-head">
+      <h2>Terbaru</h2>
+      <div class="chips" id="chips" role="group" aria-label="Saring kategori"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="more-row"><button class="more" id="moreBtn">Muat lebih banyak</button></div>
+  </section>
+
+  <!-- ===== NEWSLETTER / TELEGRAM ===== -->
+  <section class="promo" id="langganan">
+    <div>
+      <span class="eyebrow">Ikuti update harian</span>
+      <h2>Berita DeFi &amp; tokenisasi saham, langsung ke Anda.</h2>
+      <p>Ringkasan pilihan tiap hari: RWA, stablecoin, regulasi OJK, dan adopsi institusional. Gratis.</p>
+    </div>
+    <div>
+      <form class="act" id="subForm">
+        <input type="email" placeholder="email@anda.com" aria-label="Email Anda" required />
+        <button type="submit">Berlangganan</button>
+      </form>
+      <a class="tg-join" id="tgJoin" target="_blank" rel="noopener noreferrer">Atau gabung channel Telegram ↗</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== READER: halaman baca artikel ===== -->
+<div class="reader" id="reader" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Artikel">
+  <div class="reader-inner">
+    <button class="reader-close" id="readerClose">← Kembali ke daftar</button>
+    <span class="eyebrow" id="rCat"></span>
+    <h1 id="rTitle"></h1>
+    <p class="byline" id="rMeta"></p>
+    <div class="article-body" id="rBody"></div>
+    <a class="r-source" id="rSource" target="_blank" rel="noopener noreferrer">Baca sumber asli ↗</a>
+    <p class="r-disc">Artikel ini ringkasan editorial berbahasa Indonesia, disusun ulang dari sumber dan bukan nasihat keuangan. Untuk detail lengkap, buka tautan sumber asli di atas.</p>
   </div>
 </div>
 
-<!-- INTRO -->
-<section class="wrap intro">
-  <div class="intro-grid">
-    <div class="intro-left">
-      <span class="eyebrow">Intelijen Pasar Harian</span>
-      <h1>Saham, Crypto &amp; Keuangan.</h1>
-      <p>Menyaring kebisingan pasar menjadi sinyal: apa yang penting hari ini, mengapa, dan apa yang perlu Anda perhatikan. Disusun otomatis dari pemantauan berita sepanjang waktu.</p>
-    </div>
-    <aside class="intro-latest" id="heroBrief" aria-label="Brief intelijen hari ini">
-      <div class="il-head"><span class="eyebrow">Brief Intelijen Hari Ini</span><span class="il-date" id="briefDate"></span></div>
-      <div class="il-list" id="heroBriefList"></div>
-    </aside>
-  </div>
-</section>
-
-<!-- CHIPS + FEED -->
-<section class="wrap">
-  <div class="chips" id="chips"></div>
-  <div class="sec-title"><h2 id="feedTitle">Terbaru</h2><span id="count"></span></div>
-  <div class="feed" id="feed"></div>
-  <div class="more-row" id="moreRow" hidden><button class="btn" id="moreBtn">Muat lebih banyak</button></div>
-</section>
-
-<!-- SUBSCRIBE -->
-<section class="sub" id="langganan">
+<!-- ===== FOOTER ===== -->
+<footer class="site">
   <div class="wrap">
-    <span class="eyebrow" style="color:var(--gold)">Ikuti update harian</span>
-    <h2 style="margin-top:14px">Ringkasan pasar pilihan, langsung ke Anda.</h2>
-    <p>Saham, crypto, dan keuangan — disaring tiap hari. Gratis. Atau gabung channel Telegram untuk update tercepat.</p>
-    <div class="row">
-      <input type="email" id="subEmail" placeholder="email@anda.com" aria-label="Email" />
-      <button class="btn-solid btn" id="subBtn">Berlangganan</button>
-      <a class="btn" href="#" id="tgLink2">Channel Telegram ↗</a>
-    </div>
-    <p id="subNote" style="min-height:1.2em;font-size:.85rem;margin-top:14px"></p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="wrap">
-    <div class="foot-grid">
-      <div style="max-width:34ch">
-        <a class="brand" href="#top" style="margin-bottom:12px"><svg class="mk" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18.5" stroke="#C3A368"/><path d="M20 7v26M11 14c0 7 4 12 9 12s9-5 9-12" stroke="#C3A368" stroke-width="1.4"/><circle cx="20" cy="7" r="2.2" fill="#5FB0AC"/></svg><span>Family&nbsp;Office</span></a>
-        <p style="font-size:.9rem">Media intelijen pasar untuk Indonesia — saham, crypto, dan keuangan. Berita diringkas AI tiap hari.</p>
+    <div class="foot">
+      <div>
+        <a class="brand" href="#"><span class="blk" aria-hidden="true"></span>DEFI <span>·</span> CRYPTO MEDIA</a>
+        <p>Media berita yang fokus pada DeFi, tokenisasi saham, real-world assets, stablecoin, dan adopsi kripto institusional — dengan konteks pasar Indonesia.</p>
       </div>
-      <div><h4>Kanal</h4>
-        <a data-cat="Saham">Saham</a><a data-cat="Crypto">Crypto</a><a data-cat="Artikel">Artikel</a><a data-cat="Makro">Makro</a><a data-cat="Regulation">Regulasi</a>
+      <div>
+        <h4>Kanal</h4>
+        <ul>
+          <li><a href="#feed" data-jump="DeFi">DeFi</a></li>
+          <li><a href="#feed" data-jump="Tokenized Stocks">Tokenisasi Saham</a></li>
+          <li><a href="#feed" data-jump="RWA">RWA</a></li>
+          <li><a href="#feed" data-jump="Stablecoin">Stablecoin</a></li>
+          <li><a href="#feed" data-jump="Regulasi">Regulasi</a></li>
+        </ul>
       </div>
-      <div><h4>Ikuti</h4>
-        <a href="#" id="tgLink3">Telegram</a><a href="#">X / Twitter</a><a href="#">LinkedIn</a><a href="#">Instagram</a>
+      <div>
+        <h4>Ikuti</h4>
+        <ul>
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">X / Twitter</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
       </div>
     </div>
-    <p class="disclaimer">
-      Konten di situs ini bersifat informatif dan edukatif, bukan nasihat keuangan, investasi, hukum, atau pajak. Investasi pada saham dan aset kripto mengandung risiko tinggi, termasuk kemungkinan kehilangan sebagian atau seluruh modal; aset kripto sangat fluktuatif dan sebagiannya belum sepenuhnya diatur. Data harga disediakan oleh pihak ketiga dan dapat tertunda. Lakukan riset mandiri dan konsultasikan dengan penasihat profesional berlisensi sebelum mengambil keputusan.
-      <br/><br/>© <span id="yr"></span> Family Office. Seluruh hak cipta.
-    </p>
+    <p class="disc">Konten di situs ini bersifat informatif dan edukatif, bukan nasihat keuangan, investasi, hukum, atau pajak. Aset kripto berisiko tinggi; lakukan riset mandiri sebelum mengambil keputusan.</p>
+    <div class="legal">
+      <span>© <span id="yr"></span> DEFI · CRYPTO MEDIA</span>
+      <span>Dibuat untuk pembaca DeFi &amp; tokenisasi saham Indonesia</span>
+    </div>
   </div>
 </footer>
 
-<!-- MODAL -->
-<div class="modal" id="modal" hidden role="dialog" aria-modal="true">
-  <div class="modal-in"><button id="mClose" aria-label="Tutup">&times;</button><div id="mBody"></div></div>
-</div>
-
 <script>
-  // ====== KONFIGURASI ======
-  const TELEGRAM_URL = "https://t.me/familyofficeindonesia"; // channel Telegram
-  const COINS = [
-    {id:"bitcoin",s:"BTC"},{id:"ethereum",s:"ETH"},{id:"binancecoin",s:"BNB"},
-    {id:"solana",s:"SOL"},{id:"ripple",s:"XRP"},{id:"cardano",s:"ADA"},
-    {id:"dogecoin",s:"DOGE"},{id:"tron",s:"TRX"},{id:"chainlink",s:"LINK"},{id:"avalanche-2",s:"AVAX"}
-  ];
-  // Index saham (simbol Yahoo Finance)
-  const INDICES = [
-    {y:"^JKSE",s:"IHSG"},{y:"^GSPC",s:"S&P 500"},{y:"^NDX",s:"NASDAQ 100"},{y:"^DJI",s:"DJIA"},
-    {y:"^FTSE",s:"FTSE 100"},{y:"^N225",s:"NIKKEI 225"},{y:"^GDAXI",s:"DAX 40"},{y:"^STOXX50E",s:"STOXX 50"},
-    {y:"^FCHI",s:"CAC 40"},{y:"^HSI",s:"HSI"},{y:"000001.SS",s:"SHANGHAI"},{y:"^KS11",s:"KOSPI"},
-    {y:"^TWII",s:"TAIWAN"},{y:"^NSEI",s:"NIFTY 50"},{y:"^BSESN",s:"SENSEX"},{y:"^STI",s:"STI"},
-    {y:"^KLSE",s:"KLCI"},{y:"^SET.BK",s:"SET"},{y:"PSEI.PS",s:"PSEi"}
-  ];
-  // Mata uang terhadap Rupiah (data dari market.json)
-  const FX = [
-    {pair:"USD/IDR"},{pair:"EUR/IDR"},{pair:"JPY/IDR"},{pair:"GBP/IDR"},{pair:"CHF/IDR"},
-    {pair:"CNY/IDR"},{pair:"CAD/IDR"},{pair:"AUD/IDR"},{pair:"SGD/IDR"},{pair:"HKD/IDR"}
-  ];
-  document.getElementById('yr').textContent = new Date().getFullYear();
-  ['tgLink','tgLink2','tgLink3'].forEach(id=>{const a=document.getElementById(id); if(a) a.href=TELEGRAM_URL;});
+/* ============ KONFIGURASI — ISI 3 NILAI INI ============
+   - SUPA_URL  : Project URL Supabase (mis. https://xxxx.supabase.co)
+   - SUPA_ANON : anon/public key (BUKAN service_role!). Aman di web (tabel baca-saja).
+   - TELEGRAM_URL : link channel Telegram Anda (mis. https://t.me/namachannel).
+   Sebelum diisi, situs memakai berita contoh & tombol Telegram disembunyikan. */
+const SUPA_URL     = "https://mledqkynatqkqlrnrfmz.supabase.co";
+const SUPA_ANON    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZWRxa3luYXRxa3Fscm5yZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NDQ1OTgsImV4cCI6MjA5NjMyMDU5OH0.fXxMte2yjVazaKBhH0jCsBdohtUgbDu67BPEmvIRw-M";
+// ==== PENANDA SITUS ====  Repo situs pertama: "A".  Untuk repo situs kedua, ubah jadi "B".
+const SITE = "A";
+const TELEGRAM_URL = "https://t.me/DeFiCryptoMedia";
 
-  const fmtUsd = n => n>=1 ? '$'+n.toLocaleString('en-US',{maximumFractionDigits:2}) : '$'+n.toLocaleString('en-US',{maximumFractionDigits:6});
-  const fmtBig = n => { if(n>=1e12) return '$'+(n/1e12).toFixed(2)+' T'; if(n>=1e9) return '$'+(n/1e9).toFixed(2)+' B'; if(n>=1e6) return '$'+(n/1e6).toFixed(2)+' M'; return '$'+n.toLocaleString('en-US'); };
-  const sign = c => (c>=0?'+':'')+c.toFixed(2)+'%';
+/* =================================================================
+   DATA BERITA — UNTUK MENAMBAH ARTIKEL, SALIN SATU BLOK { } DI BAWAH,
+   UBAH ISINYA, DAN TARUH DI URUTAN PALING ATAS (yang terbaru di atas).
+   featured:true  -> dipakai sebagai berita utama (Hero). Cukup 1 saja.
+   ================================================================= */
+let ARTICLES = [
+  { cat:"Tokenized Stocks", featured:true,
+    title:"Volume Tokenisasi Saham Global Tembus Rekor Bulanan",
+    dek:"Lonjakan minat investor institusional mendorong perdagangan saham tertokenisasi ke level tertinggi, membuka pertanyaan baru soal akses pasar 24/7 di Indonesia.",
+    src:"Reuters", time:"2 jam lalu", url:"#" },
 
-  // ====== TICKER: Crypto + Index Bursa + Currency (berjalan ke kiri) ======
-  const TK = { crypto:[], index:[], fx:[] };
-  function tkItem(label, price, chg){
-    let c = '';
-    if(typeof chg === 'number'){ const cls = chg>=0?'up':'down'; c = `<span class="c ${cls}">${sign(chg)}</span>`; }
-    return `<span class="tk"><b>${label}</b><span class="p">${price}</span>${c}</span>`;
+  { cat:"RWA",
+    title:"Dana Treasury Tertokenisasi Lampaui US$5 Miliar On-Chain",
+    dek:"Produk surat utang negara berbasis blockchain terus menarik dana institusi, jadi tulang punggung narasi real-world assets.",
+    src:"The Block", time:"3 jam lalu", url:"#" },
+
+  { cat:"Regulasi",
+    title:"OJK Perluas Sandbox Aset Kripto: Apa Artinya bagi Tokenisasi",
+    dek:"Regulator membuka ruang uji coba lebih luas untuk produk tertokenisasi, sinyal penting bagi pelaku pasar lokal.",
+    src:"Bisnis.com", time:"5 jam lalu", url:"#" },
+
+  { cat:"Stablecoin",
+    title:"Stablecoin Rupiah Diuji untuk Penyelesaian Antarbank",
+    dek:"Proyek percontohan menyoroti potensi efisiensi pembayaran, sekaligus tantangan kepatuhan dan pengawasan.",
+    src:"CoinDesk", time:"6 jam lalu", url:"#" },
+
+  { cat:"DeFi", live:true,
+    title:"Protokol Lending DeFi Catat Lonjakan TVL Pasca Integrasi RWA",
+    dek:"Penambahan jaminan aset dunia nyata menarik likuiditas baru — sekaligus memunculkan diskusi soal profil risiko.",
+    src:"DeFiLlama", time:"8 jam lalu", url:"#" },
+
+  { cat:"Institutional",
+    title:"Manajer Aset Global Luncurkan Dana Tertokenisasi untuk Institusi",
+    dek:"Langkah pemain besar memperkuat tren adopsi produk keuangan on-chain di kalangan investor profesional.",
+    src:"Cointelegraph", time:"11 jam lalu", url:"#" },
+
+  { cat:"DeFi", live:true,
+    title:"Eksploitasi Jembatan Lintas-Rantai: Pelajaran Keamanan untuk Pengguna",
+    dek:"Insiden terbaru kembali menekankan pentingnya audit, manajemen kunci, dan kehati-hatian pengguna.",
+    src:"Decrypt", time:"14 jam lalu", url:"#" },
+
+  { cat:"Regulasi",
+    title:"Regulator Tekankan Aturan AML untuk Pasar Sekunder Stablecoin",
+    dek:"Fokus pengawasan bergeser ke aktivitas berisiko tinggi, bukan sekadar penerbitan stablecoin.",
+    src:"Reuters", time:"17 jam lalu", url:"#" },
+
+  { cat:"Tokenized Stocks",
+    title:"Saham Tertokenisasi 24/7: Peluang dan Risiko bagi Investor Ritel",
+    dek:"Akses pasar tanpa henti menjanjikan fleksibilitas, namun likuiditas dan perlindungan investor jadi sorotan.",
+    src:"The Block", time:"20 jam lalu", url:"#" },
+
+  { cat:"RWA",
+    title:"Standar Interoperabilitas Baru Perluas Jangkauan Aset Dunia Nyata",
+    dek:"Infrastruktur lintas-rantai dinilai jadi kunci agar RWA bisa berskala lintas jaringan.",
+    src:"CoinDesk", time:"22 jam lalu", url:"#" },
+
+  { cat:"Institutional",
+    title:"Adopsi Kustodian Kripto Institusional Meningkat di Asia Tenggara",
+    dek:"Permintaan penyimpanan aset yang aman tumbuh seiring masuknya pemain keuangan tradisional.",
+    src:"Nikkei Asia", time:"1 hari lalu", url:"#" },
+
+  { cat:"Regulasi",
+    title:"Otoritas Lintas Negara Mulai Selaraskan Aturan Sekuritas Tertokenisasi",
+    dek:"Harmonisasi pendekatan dinilai dapat mempercepat kepastian hukum bagi penerbit dan investor.",
+    src:"Financial Times", time:"1 hari lalu", url:"#" },
+];
+
+/* ----- ticker pasar: koin (id CoinGecko -> simbol). Harga ditarik LIVE. ----- */
+const COINS = [["bitcoin","BTC"],["ethereum","ETH"],["solana","SOL"],["binancecoin","BNB"],
+  ["ripple","XRP"],["avalanche-2","AVAX"],["chainlink","LINK"],["ondo-finance","ONDO"]];
+/* nilai awal (tampil dulu & jadi cadangan bila API gagal) */
+let TICK = [["BTC","$64,820","+1.8%",1],["ETH","$3,410","+2.3%",1],["SOL","$172.40","+4.1%",1],
+  ["BNB","$598.20","-0.6%",0],["XRP","$0.612","+0.9%",1],["AVAX","$38.05","-1.2%",0],
+  ["LINK","$18.74","+3.0%",1],["ONDO","$1.42","+6.7%",1]];
+
+/* ====================== RENDER ====================== */
+const $ = s => document.querySelector(s);
+
+// Ticker (digandakan agar gulir mulus) — bisa di-render ulang saat data live masuk
+function renderTicker(){
+  const make = ()=>TICK.map(([s,p,c,up])=>
+    `<span class="tk"><b>${s}</b>${p} <span class="${up?'up':'down'}">${c}</span><span class="dot"> ◆ </span></span>`).join("");
+  $("#ticker").innerHTML = make()+make();
+}
+renderTicker();
+
+// Gerakkan ticker via JavaScript (tetap jalan walau animasi CSS dimatikan HP).
+(function tickerMotion(){
+  const track = $("#ticker");
+  const wrap = track.parentElement;
+  let x = 0, paused = false;
+  if(wrap){
+    wrap.addEventListener("mouseenter", ()=>paused=true);
+    wrap.addEventListener("mouseleave", ()=>paused=false);
+    wrap.addEventListener("touchstart", ()=>paused=true, {passive:true});
+    wrap.addEventListener("touchend",   ()=>paused=false, {passive:true});
   }
-  function renderTicker(){
-    const items = [...TK.crypto, ...TK.index, ...TK.fx];
-    const html = items.join('');
-    // gandakan agar marquee mulus & selalu penuh selebar layar
-    document.getElementById('ticker').innerHTML = html + html + html + html;
-  }
-  function fmtIdx(n){ return n.toLocaleString('en-US',{maximumFractionDigits:2}); }
-  function fmtFx(v){
-    if(v>=1000) return v.toLocaleString('en-US',{maximumFractionDigits:0});
-    if(v>=100)  return v.toLocaleString('en-US',{maximumFractionDigits:2});
-    return v.toFixed(4);
-  }
-  // tampilkan placeholder langsung saat halaman dibuka (tidak menunggu data)
-  TK.crypto = COINS.map(c=>tkItem(c.s,'…'));
-  TK.index  = INDICES.map(i=>tkItem(i.s,'…'));
-  TK.fx     = FX.map(f=>tkItem(f.pair,'…'));
-  renderTicker();
-
-  let cryptoOk=false, globalOk=false, fxOk=false, indexOk=false;
-
-  // --- Crypto (CoinGecko, gratis) ---
-  async function loadCrypto(){
-    try{
-      const ids = COINS.map(c=>c.id).join(',');
-      const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,{cache:'no-store'});
-      if(!r.ok) throw 0;
-      const d = await r.json(); let got=0;
-      TK.crypto = COINS.map(c=>{
-        const o=d[c.id]; if(!o) return tkItem(c.s,'…');
-        got++; return tkItem(c.s, fmtUsd(o.usd), o.usd_24h_change||0);
-      });
-      if(got>0){ cryptoOk=true; renderTicker(); }
-    }catch(e){}
-  }
-
-  // --- Index bursa + Currency (dari market.json, ditulis server tiap 30 menit; bebas CORS) ---
-  async function loadMarket(){
-    try{
-      const r = await fetch('market.json?t='+Date.now(),{cache:'no-store'});
-      if(!r.ok) throw 0;
-      const m = await r.json();
-      if(Array.isArray(m.indices) && m.indices.length)
-        TK.index = m.indices.map(x=> tkItem(x.s, (typeof x.price==='number')?fmtIdx(x.price):'…', (typeof x.chg==='number')?x.chg:undefined));
-      if(Array.isArray(m.fx) && m.fx.length)
-        TK.fx = m.fx.map(x=> tkItem(x.pair, (typeof x.price==='number')?fmtFx(x.price):'…'));
-      renderTicker();
-      if(m.indices && m.indices.some(x=>typeof x.price==='number')) indexOk=true;
-    }catch(e){}
-  }
-
-  // --- Statistik global (kartu di bawah header) ---
-  async function loadGlobal(){
-    try{
-      const r = await fetch('https://api.coingecko.com/api/v3/global',{cache:'no-store'});
-      if(!r.ok) throw 0;
-      const g = (await r.json()).data;
-      document.getElementById('mc').textContent = fmtBig(g.total_market_cap.usd);
-      const ch = g.market_cap_change_percentage_24h_usd||0;
-      const mcc = document.getElementById('mcc'); mcc.textContent = sign(ch)+' (24j)'; mcc.className = 'ch num '+(ch>=0?'up':'down');
-      document.getElementById('dom').textContent = (g.market_cap_percentage.btc||0).toFixed(1)+'%';
-      document.getElementById('vol').textContent = fmtBig(g.total_volume.usd);
-      globalOk=true;
-    }catch(e){}
-  }
-
-  // muat segera
-  loadCrypto(); loadGlobal(); loadMarket();
-  // coba ulang cepat untuk crypto/stat sampai tampil
-  let quickTries=0;
-  const quick=setInterval(()=>{
-    quickTries++;
-    if((cryptoOk && globalOk) || quickTries>=8){ clearInterval(quick); return; }
-    if(!cryptoOk) loadCrypto(); if(!globalOk) loadGlobal();
-  }, 2500);
-  // refresh berkala: crypto & statistik tiap 60 detik; index & currency (market.json) tiap 60 detik
-  setInterval(()=>{ cryptoOk=false; globalOk=false; loadCrypto(); loadGlobal(); }, 60000);
-  setInterval(loadMarket, 60000);
-
-  // ====== FEED ARTIKEL (posts.json dari AI/Orchestrator) ======
-  const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  // Daftar menu TETAP: Artikel berada setelah Crypto
-  const CATS = ['Semua','Saham','Crypto','Artikel','Makro','Regulation'];
-  let POSTS = [], activeCat = 'Semua', shown = 7;
-  const CAT_LABEL = {Semua:'Semua',Saham:'Saham',Crypto:'Crypto',Artikel:'Artikel',Makro:'Makro',Macro:'Makro',Regulation:'Regulasi',Tax:'Pajak',Risk:'Risiko'};
-
-  function catsOf(p){ return (p.tags||[]); }
-  function dispTags(p){ const sheet=String(p.id||'').indexOf('sheet-')===0;
-    return (p.tags||[]).filter(t=> sheet || (CAT_LABEL[t]||t)!=='Artikel'); }  // sembunyikan label "Artikel" di kartu berita
-  function matchCat(p){ if(activeCat==='Semua') return true;
-    if(activeCat==='Artikel') return String(p.id||'').indexOf('sheet-')===0;   // hanya artikel dari Google Sheet
-    const want=(CAT_LABEL[activeCat]||activeCat).toLowerCase();
-    return catsOf(p).some(t=> t.toLowerCase()===activeCat.toLowerCase() || (CAT_LABEL[t]||'').toLowerCase()===want); }
-
-  function setCat(c){ activeCat=c; shown=7; renderChips(); renderFeed(); }
-  function renderChips(){
-    const chips=document.getElementById('chips'); chips.innerHTML='';
-    CATS.forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===activeCat?' active':''); b.textContent=CAT_LABEL[c]||c; b.onclick=()=>setCat(c); chips.appendChild(b); });
-    const nav=document.getElementById('cats'); nav.innerHTML='';
-    CATS.forEach(c=>{ const a=document.createElement('a'); a.textContent=CAT_LABEL[c]||c; if(c===activeCat)a.style.color='var(--gold-soft)';
-      a.onclick=()=>{ setCat(c); const y=document.querySelector('.chips').offsetTop-90; window.scrollTo({top:y,behavior:'smooth'}); }; nav.appendChild(a); });
-  }
-
-  function card(p, feat){
-    const b=document.createElement('button'); b.className='card'+(feat?' feat':'');
-    const tags=dispTags(p).slice(0,3).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join('');
-    const inner=`<div class="${feat?'ftxt':''}"><div class="d">${esc(p.date||'')}</div><h3>${esc(p.title||'')}</h3><p>${esc(p.summary||'')}</p><div class="tags">${tags}</div></div>`;
-    b.innerHTML = feat ? `<div class="fbadge"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#C3A368" stroke-width="1.3"><path d="M3 17l6-6 4 4 7-8"/><path d="M21 7h-5M21 7v5"/></svg></div>${inner}` : inner;
-    b.onclick=()=>openArt(p); return b;
-  }
-
-  function renderFeed(){
-    const feed=document.getElementById('feed'); feed.innerHTML='';
-    const ft=document.getElementById('feedTitle');
-    if(ft) ft.textContent = (activeCat==='Semua') ? 'Terbaru' : (CAT_LABEL[activeCat]||activeCat);
-    const list = POSTS.filter(matchCat);
-    document.getElementById('count').textContent = list.length ? `${list.length} artikel` : '';
-    if(!list.length){
-      const ch = (activeCat==='Semua') ? '' : ' di kanal '+(CAT_LABEL[activeCat]||activeCat);
-      feed.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada artikel'+ch+'. Artikel akan muncul otomatis setelah sistem berjalan, atau bisa ditambahkan manual.</div>';
-      document.getElementById('moreRow').hidden=true; return;
+  function step(){
+    if(!paused){
+      x -= 0.6;                          // kecepatan gulir (px per frame)
+      const half = track.scrollWidth / 2;
+      if(half && -x >= half) x += half;  // ulang mulus (track digandakan 2x)
+      track.style.transform = "translateX(" + x + "px)";
     }
-    const vis=list.slice(0,shown);
-    vis.forEach((p,i)=>feed.appendChild(card(p, i===0)));
-    document.getElementById('moreRow').hidden = list.length<=shown;
+    requestAnimationFrame(step);
   }
+  requestAnimationFrame(step);
+})();
 
-  function openArt(p){
-    const tags=dispTags(p).map(t=>`<span class="tg">${esc(CAT_LABEL[t]||t)}</span>`).join(' ');
-    const src = p.source ? `<div class="src"><a href="${esc(p.source)}" target="_blank" rel="noopener">Baca sumber asli ↗</a></div>` : '';
-    document.getElementById('mBody').innerHTML =
-      `<div class="art"><span class="back" id="mBack">← Kembali ke daftar</span>`+
-      `<h1>${esc(p.title||'')}</h1><div class="meta">${esc(p.date||'')} ${tags?'· '+tags:''}</div>`+
-      (p.html||('<p>'+esc(p.summary||'')+'</p>'))+ src +
-      `<div class="disc">Artikel ini ringkasan editorial berbahasa Indonesia yang disusun ulang oleh AI dari pemantauan berita, dan bukan nasihat keuangan/investasi/pajak/hukum. Aset kripto berisiko tinggi. Lakukan riset mandiri.</div></div>`;
-    document.getElementById('mBack').onclick=closeArt;
-    document.getElementById('modal').hidden=false; document.body.style.overflow='hidden';
+// Hero
+function renderHero(){
+  const news = ARTICLES.filter(a=>a.cat!=="Artikel");
+  const lead = news.find(a=>a.featured) || news[0];
+  if(!lead){ $("#heroLead").innerHTML=""; $("#heroSecs").innerHTML=""; return; }
+  $("#heroLead").innerHTML = `
+    <span class="eyebrow">${labelOf(lead.cat)}</span>
+    <h1><a href="#" data-open="${lead.id}">${lead.title}</a></h1>
+    <p class="dek">${lead.dek}</p>
+    <p class="byline">${lead.src ? `<b>${lead.src}</b> &nbsp;·&nbsp; ` : ""}${lead.time}</p>`;
+  const secs = news.filter(a=>a!==lead).slice(0,3).map(a=>`
+    <div class="sec">
+      <div class="eyebrow"><b>${labelOf(a.cat)}</b></div>
+      <h3><a href="#" data-open="${a.id}">${a.title}</a></h3>
+      <div class="meta">${a.src} · ${a.time}</div>
+    </div>`).join("");
+  $("#heroSecs").innerHTML = secs;
+}
+
+// Kategori + filter
+let activeCat = "Semua";
+let shown = 6;
+
+function labelOf(c){
+  return {"Tokenized Stocks":"Tokenisasi Saham","Institutional":"Institusional"}[c] || c;
+}
+function currentCats(){
+  const cats = [...new Set(ARTICLES.filter(a=>a.cat!=="Artikel").map(a=>a.cat))];
+  const list = ["Semua", ...cats];
+  if(ARTICLES.some(a=>a.cat==="Artikel")) list.push("Artikel");
+  return list;
+}
+
+function renderChips(){
+  $("#chips").innerHTML = currentCats().map(c=>
+    `<button class="chip ${c===activeCat?'on':''}" data-cat="${c}">${labelOf(c)}</button>`).join("");
+}
+
+function feedList(){
+  if(activeCat==="Artikel") return ARTICLES.filter(a=>a.cat==="Artikel");
+  const news = ARTICLES.filter(a=>a.cat!=="Artikel");
+  const lead = news.find(a=>a.featured) || news[0];
+  const pool = news.filter(a=>a!==lead);
+  return activeCat==="Semua" ? pool : pool.filter(a=>a.cat===activeCat);
+}
+
+function renderGrid(){
+  const list = feedList();
+  const slice = list.slice(0, shown);
+  const grid = $("#grid");
+  if(!slice.length){ grid.innerHTML = `<div class="empty">${activeCat==="Artikel"?"Belum ada artikel.":"Belum ada berita di kanal ini."}</div>`; }
+  else{
+    grid.innerHTML = slice.map(a=>`
+      <article class="card" data-open="${a.id}" tabindex="0" role="button" aria-label="Buka artikel">
+        <div class="top"><span class="tag ${a.live?'live':''}">${labelOf(a.cat)}</span></div>
+        <h3>${a.title}</h3>
+        <p class="dek">${a.dek}</p>
+        <div class="meta"><span class="src">${a.src}</span> · ${a.time}</div>
+      </article>`).join("");
+    requestAnimationFrame(()=>document.querySelectorAll(".card").forEach((c,i)=>{
+      setTimeout(()=>c.classList.add("show"), i*55);
+    }));
   }
-  function closeArt(){document.getElementById('modal').hidden=true; document.body.style.overflow='';}
-  document.getElementById('mClose').onclick=closeArt;
-  document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeArt();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('modal').hidden)closeArt();});
-  document.getElementById('moreBtn').onclick=()=>{shown+=6; renderFeed();};
+  $("#moreBtn").style.display = list.length > shown ? "" : "none";
+}
 
-  // footer kanal & menu
-  document.querySelectorAll('.foot-grid a[data-cat]').forEach(a=>a.onclick=(e)=>{e.preventDefault();activeCat=a.dataset.cat;shown=7;renderChips();renderFeed();window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});});
-  document.getElementById('menuBtn').onclick=()=>{window.scrollTo({top:document.querySelector('.chips').offsetTop-80,behavior:'smooth'});};
+// Render ulang seluruh feed (dipakai saat data live masuk / ganti kategori)
+function rebuildFeed(){
+  ARTICLES.forEach((a,i)=>{ if(a.id==null) a.id="s"+i; });
+  renderHero(); renderChips(); renderGrid();
+}
+rebuildFeed();
 
-  // langganan (tanpa backend -> mailto)
-  document.getElementById('subBtn').onclick=()=>{
-    const em=document.getElementById('subEmail').value.trim(), note=document.getElementById('subNote');
-    if(!em){note.textContent='Mohon isi email Anda.';note.style.color='var(--down)';return;}
-    note.textContent='Terima kasih! Membuka aplikasi email untuk konfirmasi…';note.style.color='var(--up)';
-    window.location.href=`mailto:deficryptomedia@gmail.com?subject=${encodeURIComponent('Berlangganan')}&body=${encodeURIComponent('Saya ingin berlangganan update harian. Email: '+em)}`;
-  };
+// Interaksi
+$("#chips").addEventListener("click", e=>{
+  const b = e.target.closest(".chip"); if(!b) return;
+  activeCat = b.dataset.cat; shown = 6; renderChips(); renderGrid();
+});
+$("#moreBtn").addEventListener("click", ()=>{ shown += 6; renderGrid(); });
 
-  // ====== BRIEF INTELIJEN HARI INI (baca arsip Orchestrator, lintas-repo) ======
-  const ORCH_RAW='https://raw.githubusercontent.com/familyoffice-hub/family-office-orchestrator/main/';
-  function mdItalic(t){ return esc(t).replace(/\*([^*]+)\*/g,'<em>$1</em>'); }
-  function parseExec(md){
-    const lines=md.split(/\r?\n/);
-    let i=lines.findIndex(l=>/executive summary/i.test(l));
-    if(i<0) return [];
-    const out=[];
-    for(let j=i+1;j<lines.length;j++){
-      if(/^\s*\d+\.\s/.test(lines[j])) break;          // mulai bagian bernomor berikutnya
-      const m=lines[j].match(/^\s*\*\s+(.*\S)\s*$/);    // baris bullet "*  ..."
-      if(m){ const t=m[1].trim(); if(t.indexOf('\uD83D\uDD12')>=0) continue; out.push(mdItalic(t)); } // lewati item 🔒
+// Jump dari nav/footer -> filter kategori
+document.querySelectorAll("[data-jump]").forEach(a=>{
+  a.addEventListener("click", ()=>{
+    activeCat = a.dataset.jump; shown = 6; renderChips(); renderGrid();
+  });
+});
+
+// Menu mobile -> buka/tutup daftar menu
+const mobileMenu = $("#mobileMenu"), menuBtn = $("#menuBtn");
+function setMenu(open){
+  mobileMenu.classList.toggle("open", open);
+  menuBtn.textContent = open ? "✕" : "☰";
+  menuBtn.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
+}
+menuBtn.addEventListener("click", e=>{ e.stopPropagation(); setMenu(!mobileMenu.classList.contains("open")); });
+// Tutup menu setelah memilih item, atau saat klik di luar
+mobileMenu.querySelectorAll("a").forEach(a=> a.addEventListener("click", ()=> setMenu(false)));
+document.addEventListener("click", e=>{
+  if(mobileMenu.classList.contains("open") && !mobileMenu.contains(e.target) && e.target!==menuBtn) setMenu(false);
+});
+
+// Form langganan -> simpan email ke Supabase (tabel subscribers)
+// Email langsung ke tim (pelanggan bisa fast-response) - tetap simpan ke Supabase juga
+const SUB_EMAIL = "deficryptomedia@gmail.com";
+function openSubMail(em){
+  const a=document.createElement("a");
+  a.href="mailto:"+SUB_EMAIL+"?subject="+encodeURIComponent("Berlangganan DeFi Crypto Media")
+        +"&body="+encodeURIComponent("Halo, saya ingin berlangganan update harian.\nEmail saya: "+em);
+  a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove();
+}
+$("#subForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const input = e.target.querySelector("input");
+  const btn = e.target.querySelector("button");
+  const email = (input.value || "").trim();
+  if(!email || !email.includes("@")){ input.focus(); return; }
+  openSubMail(email);   // buka email langsung ke deficryptomedia@gmail.com
+  const done = (txt, color)=>{ btn.textContent=txt; btn.style.background="var("+color+")";
+    setTimeout(()=>{ btn.textContent="Berlangganan"; btn.style.background="var(--gold)"; }, 2600); };
+  // Kalau Supabase belum dikonfigurasi -> mode demo (anggap sukses)
+  if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")){ input.value=""; done("Terkirim ✓","--up"); return; }
+  btn.textContent = "Mengirim...";
+  try{
+    const r = await fetch(`${SUPA_URL}/rest/v1/subscribers`, {
+      method:"POST",
+      headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON,
+                "Content-Type":"application/json", Prefer:"return=minimal" },
+      body: JSON.stringify({ email })
+    });
+    if(r.ok || r.status===409){ input.value=""; done("Terkirim ✓","--up"); }  // 409 = sudah terdaftar
+    else done("Coba lagi","--down");
+  }catch(err){ done("Coba lagi","--down"); }
+});
+
+// Tombol Gabung Telegram (sembunyikan kalau link belum diisi)
+(function(){
+  const tg = document.getElementById("tgJoin");
+  if(TELEGRAM_URL && !TELEGRAM_URL.startsWith("ISI_")){ tg.href = TELEGRAM_URL; }
+  else { tg.style.display = "none"; }
+})();
+
+/* ============ DATA PASAR LIVE (gratis, tanpa API key) ============
+   Harga koin: CoinGecko. Sinyal pasar: CoinGecko global + DeFiLlama.
+   Update tiap menit. Kalau API gagal/lambat, angka cadangan tetap tampil. */
+const byId = id => document.getElementById(id);
+function fmtPrice(n){ return n>=1 ? "$"+n.toLocaleString("en-US",{maximumFractionDigits:2}) : "$"+n.toFixed(4); }
+function fmtChg(c){ return (c>=0?"+":"")+c.toFixed(1)+"%"; }
+function fmtBig(n){
+  if(n>=1e12) return "$"+(n/1e12).toFixed(2)+"T";
+  if(n>=1e9)  return "$"+(n/1e9).toFixed(1)+"B";
+  if(n>=1e6)  return "$"+(n/1e6).toFixed(1)+"M";
+  return "$"+Math.round(n).toLocaleString();
+}
+
+async function loadPrices(){
+  try{
+    const ids = COINS.map(c=>c[0]).join(",");
+    const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+    if(!r.ok) return;
+    const d = await r.json();
+    TICK = COINS.map(([id,sym])=>{
+      const o = d[id]; if(!o) return [sym,"—","",1];
+      const chg = o.usd_24h_change || 0;
+      return [sym, fmtPrice(o.usd), fmtChg(chg), chg>=0?1:0];
+    });
+    renderTicker();
+  }catch(e){ /* biarkan nilai cadangan */ }
+}
+
+async function loadSignals(){
+  try{
+    const [gR,lR] = await Promise.all([
+      fetch("https://api.coingecko.com/api/v3/global"),
+      fetch("https://api.llama.fi/v2/chains")
+    ]);
+    if(gR.ok){
+      const g = (await gR.json()).data;
+      byId("sig-mcap").textContent = fmtBig(g.total_market_cap.usd);
+      const mc = g.market_cap_change_percentage_24h_usd || 0;
+      const c = byId("sig-mcap-c");
+      c.textContent = (mc>=0?"▲ ":"▼ ")+Math.abs(mc).toFixed(1)+"% / 24j";
+      c.className = "c "+(mc>=0?"up":"down");
+      byId("sig-btcd").textContent = g.market_cap_percentage.btc.toFixed(1)+"%";
+      byId("sig-vol").textContent  = fmtBig(g.total_volume.usd);
     }
-    return out;
-  }
-  function renderBriefPoints(points, dateStr){
-    const box=document.getElementById('heroBrief'), list=document.getElementById('heroBriefList'), dt=document.getElementById('briefDate');
-    if(!box||!list||!points.length) return false;
-    if(dt) dt.textContent=dateStr||'';
-    list.innerHTML='';
-    points.slice(0,4).forEach(p=>{ const d=document.createElement('div'); d.className='bf-item';
-      d.innerHTML='<span class="bf-dot"></span><span class="bf-tx">'+p+'</span>'; list.appendChild(d); });
-    box.style.display=''; return true;
-  }
-  function heroLatestFallback(){   // bila brief belum ada -> tampilkan artikel terbaru
-    const box=document.getElementById('heroBrief'), list=document.getElementById('heroBriefList'),
-          dt=document.getElementById('briefDate'), head=box?box.querySelector('.il-head .eyebrow'):null;
-    if(!box||!list) return;
-    const top=POSTS.slice(0,3);
-    if(!top.length){ box.style.display='none'; return; }
-    if(head) head.textContent='Artikel Terbaru'; if(dt) dt.textContent='';
-    list.innerHTML='';
-    top.forEach(p=>{ const b=document.createElement('button'); b.className='il-item';
-      const tag=(p.tags&&p.tags[0])?'<span class="tg">'+esc(CAT_LABEL[p.tags[0]]||p.tags[0])+'</span>':'';
-      b.innerHTML='<div class="d">'+esc(p.date||'')+'</div><h4>'+esc(p.title||'')+'</h4>'+tag;
-      b.onclick=()=>openArt(p); list.appendChild(b); });
-    box.style.display='';
-  }
-  function loadHeroBrief(){
-    fetch(ORCH_RAW+'report_archive.json',{cache:'no-store'})
-      .then(r=>r.ok?r.json():[]).then(arr=>{
-        const last=Array.isArray(arr)&&arr.length?arr[arr.length-1]:null;
-        if(!last||!last.report_date) throw 0;
-        const dateStr=(last.report_title||'').replace(/^Daily Brief\s*/i,'').trim()||last.report_date;
-        return fetch(ORCH_RAW+'archive/'+last.report_date+'.md',{cache:'no-store'})
-          .then(r=>r.ok?r.text():'').then(md=>{
-            if(!renderBriefPoints(parseExec(md),dateStr)) heroLatestFallback();
-          });
-      }).catch(()=>heroLatestFallback());
-  }
+    if(lR.ok){
+      const chains = await lR.json();
+      byId("sig-tvl").textContent = fmtBig(chains.reduce((s,c)=>s+(c.tvl||0),0));
+    }
+  }catch(e){ /* biarkan tampilan apa adanya */ }
+}
 
-  // muat artikel
-  fetch('posts.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(posts=>{
-    POSTS = Array.isArray(posts)?posts:[]; renderChips(); renderFeed(); loadHeroBrief();
-  }).catch(()=>{ renderChips(); renderFeed(); });
+loadPrices(); loadSignals();
+setInterval(loadPrices, 60000);    // harga: tiap 1 menit
+setInterval(loadSignals, 120000);  // sinyal: tiap 2 menit
+
+/* ============ BERITA LIVE dari Supabase (anon key, BACA-SAJA) ============
+   Konfigurasi SUPA_URL / SUPA_ANON / TELEGRAM_URL ada di ATAS skrip. */
+
+function timeAgo(iso){
+  const s = (Date.now() - new Date(iso).getTime())/1000;
+  if(s < 60)    return "baru saja";
+  if(s < 3600)  return Math.floor(s/60)+" menit lalu";
+  if(s < 86400) return Math.floor(s/3600)+" jam lalu";
+  return Math.floor(s/86400)+" hari lalu";
+}
+
+async function loadNews(){
+  if(!SUPA_URL.includes("supabase.co") || SUPA_ANON.startsWith("ISI_")) return; // belum dikonfigurasi
+  try{
+    const r = await fetch(`${SUPA_URL}/rest/v1/published_news?select=*&show_on_web=eq.true&site=eq.${SITE}&order=created_at.desc&limit=400`,
+      { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
+    if(!r.ok) return;
+    const rows = await r.json();
+    if(!rows.length) return;
+    ARTICLES = rows.map((x,i)=>({
+      id: x.id,
+      cat: x.category || "DeFi",
+      title: x.title || "(tanpa judul)",
+      dek: x.dek || "",
+      body: x.body || "",
+      src: x.source || "—",
+      time: timeAgo(x.created_at),
+      url: x.url || "#",
+      featured: i===0,
+      live: (x.priority||"").toLowerCase()==="high",
+    }));
+    activeCat = "Semua"; shown = 6;
+    rebuildFeed();
+    if(firstNews){ firstNews=false; openFromHash(); }
+  }catch(e){ /* gagal -> tetap pakai berita contoh */ }
+}
+loadNews();
+setInterval(loadNews, 180000);   // segarkan berita tiap 3 menit
+
+/* ============ HALAMAN BACA ARTIKEL ============ */
+let firstNews = true;
+function escapeHtml(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+// Escape dulu (aman dari HTML), lalu ubah *teks* / _teks_ menjadi italic
+function fmtInline(s){
+  return escapeHtml(s)
+    .replace(/\*([^*\n]+)\*/g, "<em>$1</em>")
+    .replace(/(^|[\s(])_([^_\n]+)_(?=[\s).,!?:;]|$)/g, "$1<em>$2</em>");
+}
+function findArticle(id){ return ARTICLES.find(a=>String(a.id)===String(id)); }
+
+function openReader(a){
+  if(!a) return;
+  byId("rCat").textContent = labelOf(a.cat);
+  byId("rTitle").textContent = a.title;
+  byId("rMeta").innerHTML = `${a.src ? `<b>${escapeHtml(a.src)}</b> &nbsp;·&nbsp; ` : ""}${a.time}`;
+  const text = (a.body && a.body.trim()) ? a.body : (a.dek || "");
+  let paras = text.split(/\n+/).map(p=>p.trim()).filter(Boolean);
+  const norm = s => (s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+  const titleN = norm(a.title);
+  while(paras.length){
+    const n = norm(paras[0]);
+    if(n && (n===titleN || n==="artikel lengkap" || n==="artikel" || n==="isi artikel" || n==="ringkasan" || n==="judul")) paras.shift();
+    else break;
+  }
+  byId("rBody").innerHTML = paras.map(p=>`<p>${fmtInline(p)}</p>`).join("") || `<p>${escapeHtml(a.dek||"")}</p>`;
+  const src = byId("rSource");
+  if(a.url && a.url!=="#"){ src.href=a.url; src.style.display=""; } else { src.style.display="none"; }
+  const r = byId("reader");
+  r.classList.add("open"); r.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden"; r.scrollTop=0;
+  if(a.id!=null) history.replaceState(null,"",location.pathname+"#a"+a.id);
+}
+function closeReader(){
+  const r = byId("reader");
+  r.classList.remove("open"); r.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  history.replaceState(null,"",location.pathname);
+}
+function openFromHash(){
+  const m = location.hash.match(/^#a(.+)$/); if(!m) return;
+  openReader(findArticle(m[1]));
+}
+
+byId("readerClose").addEventListener("click", closeReader);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeReader(); });
+
+// Klik kartu / judul -> buka artikel DI SITUS (bukan ke sumber asing)
+document.addEventListener("click", e=>{
+  const el = e.target.closest("[data-open]"); if(!el) return;
+  e.preventDefault(); openReader(findArticle(el.getAttribute("data-open")));
+});
+document.addEventListener("keydown", e=>{
+  if(e.key!=="Enter") return;
+  const el = e.target.closest("[data-open]"); if(!el) return;
+  e.preventDefault(); openReader(findArticle(el.getAttribute("data-open")));
+});
+openFromHash();
+
+$("#yr").textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
